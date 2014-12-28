@@ -4,6 +4,7 @@ import logging
 logger = logging.getLogger('simple_example')
 
 def count(a,b):
+    if a>b: a,b = b,a
     def dfs(n, nums,has, res):
         # print n
         if len(nums)+n<len(res):return
