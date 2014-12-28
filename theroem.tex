@@ -1,0 +1,66 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{fontenc}[T1]
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{amsfonts}
+\usepackage{amsmath, array}
+\usepackage{amsthm}
+\usepackage{vmargin}
+\usepackage{multicol}
+\usepackage{graphicx}
+\usepackage{enumerate}
+\setmargrb{19.0mm}{12.0mm}{19.0mm}{12.0mm}%{left}{up}{right}{down}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+
+\title{}
+\author{}
+\begin{document}
+
+\begin{definition}
+Let $a,b,c$ be non-negative integers.  We use ${\cal G}(a,b,c)$ to denote an undirected graph with three groups of vertices,  namely $A, B,$ and $C$ with $|A| = a, |B|=b, |C|=c$ such that $A \cup B$ forms a clique and $B \cup C$ forms a clique.
+\end{definition}
+
+\noindent
+Note that ${\cal G}(a,b,0)$ is a graph formed by the union of two cliques $K_a$ and $K_b$ of size $a$ and $b$, respectively.
+
+\begin{theorem}
+Any graph with $n \leq a + b$ vertices and $m \leq \lfloor (a+b)/2 \rfloor-1$ edges $(0<a \leq b)$ 
+is always a subgraph of ${\cal G}(a,b,0)$ (or equivalently, a subgraph of ${\cal G}(b,a,0)$).
+\end{theorem}
+
+\begin{proof}
+We shall prove this theorem by induction.  \\
+
+\noindent
+{\bf (Basis Case:)} If $a = b =1$, then $\lfloor (a+b)/2 \rfloor-1 = 0$. Any graph with $n \leq 2$ vertices and $m \leq 0$ edges (i.e., no edges) is always a subgraph of $G(1,1,0)$.
+\\
+
+\noindent
+{\bf (Inductive Case:)} Suppose that the theorem holds for all $a + b \leq k$.  Our target is to show that the theorem also holds for the case $a + b = k + 1$ with $a \leq b$.   Consider a graph $G$ with  $n \leq k+1$ vertices and with $m \leq \lfloor (k+1)/2 \rfloor -1$ edges. 
+
+\begin{enumerate}
+  \item If $G$ is connected, then $n \leq m + 1 \leq (k+1)/2 \leq b$, which is a subgraph of $K_b$, 
+           and thus a subgraph of ${\cal G}(a,b,0)$.   
+
+  \item Otherwise, $G$ is not connected.  If $G$ has no edges, then $G$ is obviously a subgraph of ${\cal G}(a,b,0)$ 
+          since $G$ has at most $a+b$ vertices.  
+          Else, let $C$ be the connected component of $G$ with the largest number $n'$ of vertices (so that $n' \geq 2$.  
+          Then, the number of edges in $C$ is at least $n'-1$.  To complete the proof, it is sufficient to show 
+          that $G - C$ is a subgraph of ${\cal G}(a, b - n', 0)$, as we can map $C$ as a subgraph in $K_b$.
+
+The number of vertices in $G-C$ is $k+1-n' = a + (b-n')$, and the number of edges of $G-C$ is at most 
+\begin{eqnarray*}
+m - (n'-1) \leq \lfloor (k+1)/2 \rfloor - n' &=& \lfloor (k+1)/2 - n' \rfloor \\
+&=& \lfloor (k+1-n')/2 - n'/2 \rfloor \\
+&\leq& \lfloor (k+1-n')/2 - 1 \rfloor \\
+&=& \lfloor (k+1-n')/2 \rfloor - 1 = \lfloor (a + (b+n'))/2 \rfloor - 1.
+\end{eqnarray*}
+By induction hypothesis, $G-C$ is a subgraph of ${\cal G}(a, b-n', 0)$, 
+and consequently $G$ is a subgraph of ${\cal G}(a,b,0)$.
+\end{enumerate}
+In all cases, $G$ is a subgraph of ${\cal G}(a,b,0)$.  This completes the proof of the induction case, so that by the principle of mathematical induction, the theorem follows.
+\end{proof}
+
+\end{document}
