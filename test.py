@@ -45,6 +45,18 @@ def table(size, xeven=False, yeven=False):
             logger.debug( a,',',b,':',p)
             table[a][b]=p
     return table
+def triangle_table(size, xeven=False, yeven=False):
+    table=[x[:] for x in [[0]*(size+1)]*(size+1)]
+    for i in range(size+1):
+        table[i][0] = table[0][i]=i;
+    for a in range(1, size+1):
+        if a%2==1 and xeven: continue
+        for b in range(1,size-a+2):
+            if b%2==1 and yeven: continue
+            p=a+b-len(count(a,b))
+            logger.debug( a,',',b,':',p)
+            table[a][b]=p
+    return table
 def input():
     print 'keyin: a b (0 0 for end)'
     while True:
