@@ -1,0 +1,59 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{fontenc}[T1]
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{amsfonts}
+\usepackage{amsmath, array}
+\usepackage{amsthm}
+\usepackage{vmargin}
+\usepackage{multicol}
+\usepackage{graphicx}
+\usepackage{enumerate}
+\setmargrb{19.0mm}{12.0mm}{19.0mm}{12.0mm}%{left}{up}{right}{down}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+
+\title{}
+\author{}
+\begin{document}
+
+
+\noindent
+To find $g(a,b)$ with minimal number of edges, it's obvious that $g(a,b)$ should not form a cycle
+
+\begin{proof} 
+if $g(a,b)$ form a cycle, remove an edge, the number of vertices each component remains same, whether $g'(a,b)$ is the subgraph of ${\cal G}(a,b)$ is equivalent to whether $g(a,b)$ is the subgraph of ${\cal G}(a,b)$
+\end{proof}
+
+\begin{theorem}
+
+the problem would be transformed to find the maximal number of partitions of $a+b$ such that no subset sum of these partition equals $a$
+
+\end{theorem}
+
+\begin{proof} 
+Let $t =$ number of edge of $g(a,b)$
+
+$n$ as number of componets in $g(a,b)$
+
+$M$ as the set of components
+
+$m$ as the set of number of vertices
+
+$m_i$  as number of vertices of $i$th component
+
+since $g(a,b)$ doesn't contain any cycle, $t = a+b - n$, to find minimal t is equivalent to find maximal n such that $g(a,b)$ is not the subgraph of ${\cal G}(a,b)$
+
+if $g(a,b)$ is the subgraph of ${\cal G}(a,b)$, 
+since each component is conected, each one is either in $K_a$ or $K_b$, there exist a subset of M in $K_a$ the number of vertices of M = a
+,e.g there exist a subset of m is equal to $a$
+
+if $g(a,b)$ is not the subgraph ${\cal G}(a,b)$, there must not a subset of m is equal to $a$, since if there subset of m is equal to $a$ let these componets in $K_a$ and others in $K_b$, then $g(a,b)$ is the subgraph ${\cal G}(a,b)$ thus raise contradiction
+
+
+the sum of $m$ is $a+b$, so the theorem holds
+
+\end{proof}
+
+\end{document}

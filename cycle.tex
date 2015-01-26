@@ -1,0 +1,128 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{fontenc}[T1]
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{amsfonts}
+\usepackage{amsmath, array}
+\usepackage{amsthm}
+\usepackage{vmargin}
+\usepackage{multicol}
+\usepackage{graphicx}
+\usepackage{enumerate}
+
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\setmargrb{19.0mm}{12.0mm}{19.0mm}{12.0mm}%{left}{up}{right}{down}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{definition}{Definition}
+\newtheorem*{remark}{Remark}
+
+\title{}
+\author{}
+\begin{document}
+
+\begin{definition}
+$\rho(a,b)$ is the maximal number of partitions of $a+b$ such that no subset sum of these partition equals $a$
+
+$d$ is the smallest non-factor of $a$
+\end{definition}
+
+\begin{remark}
+$\tau(a,b)=a+b+1-\rho(a,b)$
+\end{remark}
+
+\begin{lemma}
+$\rho(a,b)$ has lower-bound $\ceil{\frac{b}{d}}$
+\end{lemma} 
+
+\begin{proof}
+To proof a lower-bound, we show a case whose number of partitions=$\ceil{\frac{b}{d}}$
+
+The case is trivial, divide $a+b$ into $\ceil{\frac{b}{d}}-1$ instances of $d$ and a $a+b-d\ceil{\frac{b}{d}}-1$ (denoted by $s$)
+
+Proof the case has no subset sum = a by contradiction
+
+If the subset contains $s$ since $s>a$ $\implies$ contradiction
+
+If the subset doesn't contains $s$, it contains only several $d$, but since $d\not| a$ $\implies$ contradiction
+\end{proof}
+
+\begin{theorem}
+	$\forall b>d(d+1)aH_p$, an optimal partition contains at least $\floor{\frac{a}{d}}$ instances of $d$
+\end{theorem}
+
+
+\begin{proof}
+    We shall prove this theorem by contradiction.  
+
+    S is a partition of a+b that no subset sum=$a$
+
+    $X_i$ is the number of times $i$ appears in S
+
+    $X = \sum_i{X_i}$
+
+    $\forall i<d, X_i<\frac{a}{i}$ since if $\forall i<d, i|a$ if $X_i\geq \frac{a}{i}$ there's a subset sum=$a$
+
+    \begin{equation}
+        \sum_{i<d}{X_i}<aH_{p-1}
+    \end{equation}
+
+    if $X_d<\floor{\frac{a}{d}}$,
+
+    \begin{align*}
+        X&=\sum_{i<d}{X_i}+X_d+\sum_{i>d}{X_i}\\
+         &<aH_{p-1}+\floor{\frac{a}{d}}+\sum_{i>d}{X_i}\\
+         &\leq aH_p+\floor{\frac{b}{d+1}}
+    \end{align*}
+
+    $\forall b>d(d+1)aH_p, X<aH_p+\ceil{\frac{b}{d+1}}\leq \ceil{\frac{b}{d}}$
+
+    S is not optimal
+\end{proof}
+
+
+\begin{theorem}
+	$\forall b>d(d+1)aH_p$, $\rho(a,b+d)=\rho(a,b)+1$
+\end{theorem}
+
+\begin{proof}
+
+    $S$ is a optimal partition of a+b that no subset sum=$a$ ($b>d(d+1)aH_p$)
+    
+    $S'=S+d$ is a partition of a+b+d 
+
+    We divide the proof into subset part and optimal part
+
+    {\bf(Subset)}
+
+    $S'$ has no subset sum=$a$ since $S$ has at least $\floor{\frac{a}{d}}$ instances of d
+
+    and $S$ has no subset sum=$a$, implies $S$ has no subset-sum=$a-kd \forall k\geq0$
+
+    $S'$ has subset-sums of S and subset-sums of S+d, the former has no $a$ as description, the latter has no $a$ since $S$ has no subset-sum=$a-kd\forall k\geq0$
+
+    $S'$ has no subset-sum=$a$
+
+    {\bf(Optimal)}
+        prove by contradiction
+
+        if $S'$ is not optimal there exist an optimal partition $P'$ that $|P'|>|S'|$ and has no subset-sum=$a$
+
+        $P'$ has at least one $d$, let $P=P'-d(sum(P)=sum(S))$ then $P$ has no subset-sum=$a$ and $|P|=|P'|-1>|S'|-1=|S|$, which contradicts $S$ is optimal
+
+        $S'$ is optimal
+
+    Thus the theorem holds
+\end{proof}
+
+\begin{corollary}
+for a constant $a$, $\rho(a,b)$ forms cycle of length $d$ if b is sufficiently large
+\end{corollary}
+
+
+\end{document}

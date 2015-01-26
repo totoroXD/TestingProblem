@@ -30,7 +30,7 @@ def count(a,b):
     res=[]
     nums=[]
     has=[False]*(a+b+1)
-    has[0]=True;    
+    has[0]=True;
     dfs(a+b, nums, has, res)
     return res
 def table(size, xeven=False, yeven=False):
@@ -57,6 +57,8 @@ def triangle_table(size, xeven=False, yeven=False):
             logger.debug( a,',',b,':',p)
             table[a][b]=p
     return table
+def print_result(result):
+	print result
 def input():
     print 'keyin: a b (0 0 for end)'
     while True:
