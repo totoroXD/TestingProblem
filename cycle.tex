@@ -45,7 +45,7 @@ To proof a lower-bound, we show a case whose number of partitions=$\ceil{\frac{b
 
 The case is trivial, divide $a+b$ into $\ceil{\frac{b}{d}}-1$ instances of $d$ and a $a+b-d\ceil{\frac{b}{d}}-1$ (denoted by $s$)
 
-Proof the case has no subset sum = a by contradiction
+Prove the case has no subset sum = a by contradiction
 
 If the subset contains $s$ since $s>a$ $\implies$ contradiction
 
@@ -53,46 +53,46 @@ If the subset doesn't contains $s$, it contains only several $d$, but since $d\n
 \end{proof}
 
 \begin{theorem}
-	$\forall b>d(d+1)aH_p$, an optimal partition contains at least $\floor{\frac{a}{d}}$ instances of $d$
+	$\forall b>d(d+1)aH_d$, an optimal partition contains at least $\floor{\frac{a}{d}}$ instances of $d$
 \end{theorem}
 
 
 \begin{proof}
     We shall prove this theorem by contradiction.  
 
-    S is a partition of a+b that no subset sum=$a$
+    $S$ is a partition of a+b that no subset sum=$a$
 
-    $X_i$ is the number of times $i$ appears in S
+    $X_i$ is the number of times $i$ appears in $S$
 
     $X = \sum_i{X_i}$
 
     $\forall i<d, X_i<\frac{a}{i}$ since if $\forall i<d, i|a$ if $X_i\geq \frac{a}{i}$ there's a subset sum=$a$
 
     \begin{equation}
-        \sum_{i<d}{X_i}<aH_{p-1}
+        \sum_{i<d}{X_i}<aH_{d-1}
     \end{equation}
 
     if $X_d<\floor{\frac{a}{d}}$,
 
     \begin{align*}
         X&=\sum_{i<d}{X_i}+X_d+\sum_{i>d}{X_i}\\
-         &<aH_{p-1}+\floor{\frac{a}{d}}+\sum_{i>d}{X_i}\\
-         &\leq aH_p+\floor{\frac{b}{d+1}}
+         &<aH_{d-1}+\floor{\frac{a}{d}}+\sum_{i>d}{X_i}\\
+         &\leq aH_d+\floor{\frac{b}{d+1}}
     \end{align*}
 
-    $\forall b>d(d+1)aH_p, X<aH_p+\ceil{\frac{b}{d+1}}\leq \ceil{\frac{b}{d}}$
+    $\forall b>d(d+1)aH_d, X<aH_d+\ceil{\frac{b}{d+1}}\leq \ceil{\frac{b}{d}}$
 
     S is not optimal
 \end{proof}
 
 
 \begin{theorem}
-	$\forall b>d(d+1)aH_p$, $\rho(a,b+d)=\rho(a,b)+1$
+	$\forall b>d(d+1)aH_d$, $\rho(a,b+d)=\rho(a,b)+1$
 \end{theorem}
 
 \begin{proof}
 
-    $S$ is a optimal partition of a+b that no subset sum=$a$ ($b>d(d+1)aH_p$)
+    $S$ is a optimal partition of a+b that no subset sum=$a$ ($b>d(d+1)aH_d$)
     
     $S'=S+d$ is a partition of a+b+d 
 
