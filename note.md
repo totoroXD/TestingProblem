@@ -5,16 +5,30 @@ tau(a,b,0)>=floor(a+b,2)
 c=0
 - thereom: 轉化成 integer partition
 - b夠大以d循環 d是a的最小非因數.   
-	-b>=a*d (a=6不對)
-	-b>=d(d+1)aH(p) (proved in cycle.tex)
-	-應改有更小的b
+ -b>=a*d (a=6不對)
+ -b>=d(d+1)aH(p) (proved in cycle.tex)
+ -應改有更小的b
 - thereom0.3證明要改
-- conject: G(a,a~3a)=2a (a is odd)
+- conject: tau(a,a~3a)=2a (a is even)
 
 c=1
 - fact: 有比b+2更好的解
-- 
 
 c>=2
 - 重複用度數刪掉中性
 - 一個環利用a,b特性
+
+Outline
+-
+1. introduction
+2. An Equivalence Graph Problem
+ - (a+b)/2 lower-bound
+3. Integer Partition
+ - Thm (2,b)
+ - Optimal solution via integer partitioning in O(a*2^sqrt(a+b))
+4. Further Speedup
+ - cycle proof
+ - O(a*2^sqrt(d(d+1)a))
+5. Open Problems
+ - cycle 可以更早嗎？
+ - Avoidance integer partitioning?
