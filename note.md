@@ -8,8 +8,7 @@ c=0
  -b>=a*d (a=6不對)
  -b>=d(d+1)aH(p) (proved in cycle.tex)
  -應改有更小的b
-- thereom0.3證明要改
-- conject: tau(a,a~3a)=2a (a is even)
+- conject: tau(a,a~2a)=2a (a is even)
 
 c=1
 - fact: 有比b+2更好的解

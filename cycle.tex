@@ -1,40 +1,4 @@
-\documentclass[12pt,a4paper]{article}
-\usepackage{fontenc}[T1]
-\usepackage{algorithm}
-\usepackage{algorithmic}
-\usepackage{amsfonts}
-\usepackage{amsmath, array}
-\usepackage{amsthm}
-\usepackage{vmargin}
-\usepackage{multicol}
-\usepackage{graphicx}
-\usepackage{enumerate}
-
-\usepackage{mathtools}
-\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
-\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
-
-\setmargrb{19.0mm}{12.0mm}{19.0mm}{12.0mm}%{left}{up}{right}{down}
-
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{corollary}{Corollary}[theorem]
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{definition}{Definition}
-\newtheorem*{remark}{Remark}
-
-\title{}
-\author{}
-\begin{document}
-
-\begin{definition}
-$\rho(a,b)$ is the maximal number of partitions of $a+b$ such that no subset sum of these partition equals $a$
-
-$d$ is the smallest non-factor of $a$
-\end{definition}
-
-\begin{remark}
-$\tau(a,b)=a+b+1-\rho(a,b)$
-\end{remark}
+\section{Futher Speedup}
 
 \begin{lemma}
 $\rho(a,b)$ has lower-bound $\ceil{\frac{b}{d}}$
@@ -45,84 +9,139 @@ To proof a lower-bound, we show a case whose number of partitions=$\ceil{\frac{b
 
 The case is trivial, divide $a+b$ into $\ceil{\frac{b}{d}}-1$ instances of $d$ and a $a+b-d\ceil{\frac{b}{d}}-1$ (denoted by $s$)
 
-Prove the case has no subset sum = a by contradiction
+Prove the case avoids $\pa$ by contradiction
 
 If the subset contains $s$ since $s>a$ $\implies$ contradiction
 
 If the subset doesn't contains $s$, it contains only several $d$, but since $d\not| a$ $\implies$ contradiction
 \end{proof}
 
+\begin{lemma}
+If a multiset $S$ avoids $a$ and composed only by factors of $a$, 
+
+$|S|<a$
+\end{lemma}
+
+\begin{proof}
+
+We shall prove this by contradiction
+
+We denote the number of $i$ in $S$ as $X_i$, that is, we have $X_i$ '$i$'(s) in $S$.
+
+We denote $P_k$ as the first $k$ elements of $S$. $P_0$ is the empty set.
+
+We define $SB(s)$ for a multiset $s$ as the $a$+1-bit vector of appearance of subset-sums of $s$, $i$th bit=1 if and only if there is an $i$ in subset-sums of $s$.For example, $\pa=5$, $SB({1,3,3})=bits(\{ 0,1,3,4,6,7\})=110110$, ${6,7}$ is not kept in $SB$ since they are greater than $\pa$
+
+% \begin{remark}
+Not that for any $s$, $SB(s)[0]=1$ since subset-sum always has zero.
+% \end{remark}
+
+We divide the proof into two sections.
+
+1. $SB(P_{k+1})>SB(P_k) \forall k$ 
+
+Seperately denote the left and right by $sb'$ and $sb$.
+
+Prove this by contradiction, if $sb'=sb$ for some k, then 
+
+$\forall i\geq w,sb'[i] = (sb[i]\ or\ sb[i-w]=sb[i])$($w$ is the k+1th element of $S$) implies
+
+$\forall i\geq w, (sb[i]=0 \implies sb[i-w]=0)$
+
+Since $S$ avoids $\pa$, sb[i]=0, then $\forall t, sb[i-tw]=0(i-tw\geq 0)$
+
+w is a factor of a, so sb[0]=0, contradicts $SB(s)[0]$ is always $1$
+
+2. We discover $SB(P_0)$ to $SB(P_{|S|})$, since there are intinialy $a$ bits are 0, each time
+$SB$ has at least one bit goes from 0 to 1 and no bit from 1 to 0. If $|S|\geq a$, then $SB(S)[\pa]$
+must be 1, contradicts $S$ avoids $\pa$
+
+
+\end{proof}
+
 \begin{theorem}
-	$\forall b>d(d+1)aH_d$, an optimal partition contains at least $\floor{\frac{a}{d}}$ instances of $d$
+$\forall b>d(d+1)a$, an optimal partition contains at least $\floor{\frac{a}{d}}$ instances of $d$
 \end{theorem}
 
 
 \begin{proof}
     We shall prove this theorem by contradiction.  
 
-    $S$ is a partition of a+b that no subset sum=$a$
+    $S$ is a partition of a+b avoids $a$
 
     $X_i$ is the number of times $i$ appears in $S$
 
     $X = \sum_i{X_i}$
 
-    $\forall i<d, X_i<\frac{a}{i}$ since if $\forall i<d, i|a$ if $X_i\geq \frac{a}{i}$ there's a subset sum=$a$
-
     \begin{equation}
-        \sum_{i<d}{X_i}<aH_{d-1}
+        \sum_{i<d}{X_i}<a
     \end{equation}
 
     if $X_d<\floor{\frac{a}{d}}$,
 
     \begin{align*}
         X&=\sum_{i<d}{X_i}+X_d+\sum_{i>d}{X_i}\\
-         &<aH_{d-1}+\floor{\frac{a}{d}}+\sum_{i>d}{X_i}\\
-         &\leq aH_d+\floor{\frac{b}{d+1}}
+         &<a+\floor{\frac{a}{d}}+\sum_{i>d}{X_i}\\
+         &\leq a+\floor{\frac{b}{d+1}}
     \end{align*}
 
-    $\forall b>d(d+1)aH_d, X<aH_d+\ceil{\frac{b}{d+1}}\leq \ceil{\frac{b}{d}}$
+    $\forall b>d(d+1)a, X<a+\ceil{\frac{b}{d+1}}\leq \ceil{\frac{b}{d}}$
 
     S is not optimal
 \end{proof}
 
-
 \begin{theorem}
-	$\forall b>d(d+1)aH_d$, $\rho(a,b+d)=\rho(a,b)+1$
+	$\forall b>d(d+1)a$, $\rho(a,b+d)=\rho(a,b)+1$
 \end{theorem}
 
 \begin{proof}
-
-    $S$ is a optimal partition of a+b that no subset sum=$a$ ($b>d(d+1)aH_d$)
     
-    $S'=S+d$ is a partition of a+b+d 
+    % denote $s\bigoplus x$ as the set after adding x to each element in $s$
+
+    $S$ is a optimal partition of a+b avoids $a$ ($b>d(d+1)a$)
+    
+    $S'=S+'d'$ is a partition of a+b+d 
 
     We divide the proof into subset part and optimal part
 
     {\bf(Subset)}
 
-    $S'$ has no subset sum=$a$ since $S$ has at least $\floor{\frac{a}{d}}$ instances of d
+    divide $S$ into 'd's ($D$) and not 'd's($C$)
+    
+    $D$ has at least $\floor{\frac{a}{d}}$ instances of 'd' and $S$ avoids $a$, implies $C$ avoids $\pa-kd (k\geq0)$
 
-    and $S$ has no subset sum=$a$, implies $S$ has no subset-sum=$a-kd \forall k\geq0$
+    In the same way, $S'=D'+C'$ ($D'=D+'d', C'=C$)
 
-    $S'$ has subset-sums of S and subset-sums of S+d, the former has no $a$ as description, the latter has no $a$ since $S$ has no subset-sum=$a-kd\forall k\geq0$
-
-    $S'$ has no subset-sum=$a$
+    Since $C'$ avoids $\pa-kd$, $D'$ consist of only 'd's, $S'$ avoids $\pa$.
 
     {\bf(Optimal)}
         prove by contradiction
 
-        if $S'$ is not optimal there exist an optimal partition $P'$ that $|P'|>|S'|$ and has no subset-sum=$a$
+        If $S'$ is not optimal there exist an optimal partition $P'$ that $|P'|>|S'|$ and has no subset-sum=$a$
 
-        $P'$ has at least one $d$, let $P=P'-d(sum(P)=sum(S))$ then $P$ has no subset-sum=$a$ and $|P|=|P'|-1>|S'|-1=|S|$, which contradicts $S$ is optimal
+        $P'$ has at least one $d$, let $P=P'-d(sum(P)=sum(S))$ then $P$ has no subset-sum=$a$ and $|P|=|P'|-1>|S'|-1=|S|$, which contradicts $S$ is optimal.
 
-        $S'$ is optimal
+        $S'$ is optimal.
 
-    Thus the theorem holds
+    Thus the theorem holds.
 \end{proof}
 
 \begin{corollary}
 for a constant $a$, $\rho(a,b)$ forms cycle of length $d$ if b is sufficiently large
 \end{corollary}
 
+\subsection{Algorithm using cycle property}
 
-\end{document}
+let $K=a+b-kd>d(d+1)a$ (choose maximal k)
+
+\begin{algorithmic}
+  \STATE{$R= \{\pa+\pb\}$}
+  \FORALL{partition $P$ of K}
+    \IF{$P$ avoids $\pa$ \AND{$|P|>|R|$}} \STATE{$R=P$}
+    \ENDIF
+  \ENDFOR
+  \STATE{output $R$+k instances of 'd'}
+\end{algorithmic}
+check P's avoidence by Dynamic-Programming as solving discrete knapsack problem, keep avoidence vector when enumerating.
+
+Time Complexity: $O(\pa\frac{exp(\sqrt{\frac{2(d(d+1)\pa))}{3} } )}{d(d+1)\pa})$

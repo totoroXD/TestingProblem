@@ -1,41 +1,26 @@
-\documentclass[12pt,a4paper]{article}
-\usepackage{fontenc}[T1]
-\usepackage{algorithm}
-\usepackage{algorithmic}
-\usepackage{amsfonts}
-\usepackage{amsmath, array}
-\usepackage{amsthm}
-\usepackage{vmargin}
-\usepackage{multicol}
-\usepackage{graphicx}
-\usepackage{enumerate}
-\setmargrb{19.0mm}{12.0mm}{19.0mm}{12.0mm}%{left}{up}{right}{down}
-
-\newtheorem{theorem}{Theorem}
-\newtheorem{definition}{Definition}
-
-\title{}
-\author{}
-\begin{document}
-
+\section{Integer Partition}
 
 \noindent
-To find $g(a,b)$ with minimal number of edges, it's obvious that $g(a,b)$ should not form a cycle
+To find $g(\pa,\pb)$ with minimal number of edges, it's obvious that $g(\pa ,\pb)$ should not form a cycle
 
 \begin{proof} 
-if $g(a,b)$ form a cycle, remove an edge, the number of vertices each component remains same, whether $g'(a,b)$ is the subgraph of ${\cal G}(a,b)$ is equivalent to whether $g(a,b)$ is the subgraph of ${\cal G}(a,b)$
+if $g(\pa,\pb)$ form a cycle, remove an edge, the number of vertices each component remains same, whether $g'(\pa,\pb)$ is the subgraph of ${\cal G}(\pa,\pb)$ is equivalent to whether $g(\pa,\pb)$ is the subgraph of ${\cal G}(\pa,\pb)$
 \end{proof}
+
+\begin{definition}
+We define a multiset avoids $x$ if its subset-sums has no $x$, a partition avoids if its parts avoids $x$
+\end{definition}
 
 \begin{theorem}
 
-the problem would be transformed to find the maximal number of partitions of $a+b$ such that no subset sum of these partition equals $a$
+the problem would be transformed to find a partition of $\pa+\pb$ with  maximal number of parts that avoids $\pa$
 
 \end{theorem}
 
 \begin{proof} 
-Let $t =$ number of edge of $g(a,b)$
+Let $t =$ number of edge of $g(\pa,\pb)$
 
-$n$ as number of componets in $g(a,b)$
+$n$ as number of componets in $g(\pa,\pb)$
 
 $M$ as the set of components
 
@@ -43,17 +28,69 @@ $m$ as the set of number of vertices
 
 $m_i$  as number of vertices of $i$th component
 
-since $g(a,b)$ doesn't contain any cycle, $t = a+b - n$, to find minimal t is equivalent to find maximal n such that $g(a,b)$ is not the subgraph of ${\cal G}(a,b)$
+since $g(a,b)$ doesn't contain any cycle, $t = \pa+\pb - n$, to find minimal t is equivalent to find maximal n such that $g(\pa,\pb)$ is not the subgraph of ${\cal G}(\pa,\pb)$
 
-if $g(a,b)$ is the subgraph of ${\cal G}(a,b)$, 
+if $g(\pa,\pb)$ is the subgraph of ${\cal G}(\pa,\pb)$, 
 since each component is conected, each one is either in $K_a$ or $K_b$, there exist a subset of M in $K_a$ the number of vertices of M = a
 ,e.g there exist a subset of m is equal to $a$
 
-if $g(a,b)$ is not the subgraph ${\cal G}(a,b)$, there must not a subset of m is equal to $a$, since if there subset of m is equal to $a$ let these componets in $K_a$ and others in $K_b$, then $g(a,b)$ is the subgraph ${\cal G}(a,b)$ thus raise contradiction
+if $g(\pa,\pb)$ is not the subgraph ${\cal G}(\pa,\pb)$, there must not a subset of m is equal to $a$, since if there subset of m is equal to $a$ let these componets in $K_a$ and others in $K_b$, then $g(\pa,\pb)$ is the subgraph ${\cal G}(\pa,\pb)$ thus raise contradiction
 
 
-the sum of $m$ is $a+b$, so the theorem holds
+the sum of $m$ is $\pa+\pb$, so the theorem holds
 
 \end{proof}
 
-\end{document}
+\begin{definition}
+$\rho(\pa,\pb)$ is the maximal number of parts of $\pa+\pb$ avoids $\pa$
+
+$d$ is the smallest non-factor of $\pa$
+\end{definition}
+
+\begin{theorem}
+Optimal partition for $\pa=2$
+
+\[
+ \rho(2,\pb) =
+   \begin{cases}
+     1+\frac{\pb}{3}   &\mbox{if }\pb\equiv0\\
+     1+\frac{\pb-1}{3} &\mbox{if }\pb\equiv1\\
+     1+\frac{\pb+1}{3} &\mbox{if }\pb\equiv2
+   \end{cases}
+   \pmod{3}
+\]
+\end{theorem}
+
+\begin{proof}
+	since there is no $a$ in subset sums of the partition $P$, there is at most one '$1$' and no '$2$' in $P$, $|P|\leq \floor{\frac{\pb+2}{3}}$
+
+	for $\pb\equiv0\pmod{3}$, there exist an optimal partition $P=\{1,4,3,...\}$('...' are '$3$'s) that reaches optimal bound and avoids $\pa$
+
+	for $\pb\equiv1\pmod{3}$, there exist an optimal partition $P=\{1,5,3,...\}$('...' are '$3$'s) that reaches optimal bound and avoids $\pa$
+
+	for $\pb\equiv2\pmod{3}$, there exist an optimal partition $P=\{1,3,3,...\}$('...' are '$3$'s) that reaches optimal bound and avoids $\pa$
+
+\end{proof}
+
+\begin{definition}
+$\rho(a,b)$ is the maximal number of parts of $a+b$'s partitions that avoids $a$
+
+$d$ is the smallest non-factor of $a$
+\end{definition}
+
+\begin{remark}
+$\tau(a,b)=a+b+1-\rho(a,b)$
+\end{remark}
+
+\subsection{Exact Algorithm}
+
+\begin{algorithmic}
+  \STATE{$R= \{\pa+\pb\}$}
+  \FORALL{partition $P$ of a+b}
+    \IF{$P$ avoids $\pa$ \AND{$|P|>|R|$}} \STATE{$R=P$}
+    \ENDIF
+  \ENDFOR
+\end{algorithmic}
+check P's avoidence by Dynamic-Programming as solving discrete knapsack problem, keep avoidence vector when enumerating.
+
+Time Complexity: $O(\pa\frac{exp(\sqrt{\frac{2(\pa+\pb))}{3} } )}{\pa+\pb})$
