@@ -34,28 +34,26 @@ def count(a,b):
     dfs(a+b, nums, has, res)
     return res
 def table(size, xeven=False, yeven=False):
-    table=[x[:] for x in [[0]*(size+1)]*(size+1)]
-    for i in range(size+1):
-        table[i][0] = table[0][i]=i;
+    table=[x[:] for x in [[0]*size]*size]
     for a in range(1, size+1):
         if a%2==1 and xeven: continue
         for b in range(1,size+1):
             if b%2==1 and yeven: continue
             p=len(count(a,b))
             logger.debug( a,',',b,':',p)
-            table[a][b]=p
+            table[a-1][b-1]=p
     return table
+
 def triangle_table(size):
-    table=[x[:] for x in [[0]*(size+1)]*(size+1)]
-    for i in range(size+1):
-        table[i][0] = table[0][i]=i;
+    table=[x[:] for x in [[0]*size]*size]
     for a in range(1, size+1):
         for b in range(1,size-a+2):
             print >>sys.stderr, a, ',', b
             p=len(count(a,b))
             logger.debug( a,',',b,':',p)
-            table[a][b]=p
+            table[a-1][b-1]=p
     return table
+
 def print_result(result):
 	print result
 def input():

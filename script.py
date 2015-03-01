@@ -1,32 +1,24 @@
 import test
 import pprint
-# tab = test.table(22,0,0)
-# fst=1
-# for row in tab:
-# 	print '|',
-# 	for ele in row:
-# 		if ele==0: print ' ',
-# 		else: print ele,
-# 		print '|',
-# 	print ''
-# 	if fst:
-# 		fst=0
-# 		for ele in row: print '|---',
-# 		print '|'
+from tabulate import tabulate
 
-# print '\n'
-fst=1
-tritab = test.triangle_table(60)
-for row in tritab:
-	print '|',
-	for ele in row:
-		if ele==0: print ' ',
-		else: print ele,
-		print '|',
-	print ''
-	if fst:
-		fst=0
-		for ele in row: print '|---',
-		print '|'
-# pp = pprint.PrettyPrinter(indent=4)
-# pp.pprint(tab)
+pp = pprint.PrettyPrinter(indent=0)
+def addOutline(table):
+	n=len(table)
+	m=len(table[0])
+	table = [range(0,m+1)]+table
+	for i,row in enumerate(table):
+		if i: table[i] = [i]+table[i]
+	return table
+tautab = rhotab = test.table(20)
+rhotab = addOutline(rhotab)
+rhotab[0][0] = 'rho(a,b)'
+for i,row in enumerate(tautab):
+	for j, ele in enumerate(row):
+		a=i+1
+		b=j+1
+		tautab[i][j] = a+b-ele
+tautab = addOutline(tautab)
+tautab[0][0] = 'tau(a,b)'
+print tabulate(rhotab,tablefmt="latex")
+print tabulate(tautab,tablefmt="latex")
