@@ -1,0 +1,59 @@
+\section{An Equivalence Graph Problem}
+
+
+\subsection*{Idea}
+
+We can present a set of comparisons as a graph. Vertice are the coins, edges are the comparisons.
+
+Consider a graph ${\cal G}(\pa,\pb)$ contains two part, one is $K_\pa$, another is $K_\pb$, then we want to find a graph $g(\pa,\pb)$ (number of vertices $\leq \pa+\pb$), and $g(\pa,\pb)$ is not a subgraph of ${\cal G}(\pa,\pb)$. 
+Let $t =$ number of edges of $g(\pa,\pb)$, then through $t$ comparison we can garantee at least one of them is unbalanced.
+
+\begin{proof}
+
+Prove by contradiction.
+
+Denote the real coins as '+' and the fake ones as '-'. 
+
+We compare edges of g(a,b). If we found all balance in these t comparison, we can assign a '+'s and b '-'s into g(a,b), then g(a,b) is the subgraph of ${\cal G}(\pa,\pb)$.
+\end{proof}
+
+\begin{definition}
+$\tau(\pa,\pb)$ is the number of comparisons we can garantee at least one of them is unbalanced.
+
+Optimal means with minimum number of comparisons or edges.
+\end{definition}
+
+For example, $\tau(1,2)=2$, since testing a pair may result in balanced. On the other hand, testing two non-duplicate pair, one of them must results in unbalanced.
+
+In this case, testing a pair is enough to point out a real coin and a fake one. 
+
+Denote the coins we test as $coin_a$ $coin_b$ , the coin we didn't test as $coin_c$
+If $coin_a$ and $coin_b$ is not balanced, then point out $coin_a$ and $coin_b$. Otherwise, point out $coin_a$ and $coin_c$
+\\
+
+Intuitively, if finding unbalance in a comparison, the game ends. But sometimes before the unbalance appears, we can conclude a pair is unbalance after k comparisons(k is the answer) and end the game. The following shows $k_{min}=t_{min}-1$, which means the answer in Section 1 is $\tau(\pa,\pb)-1$
+
+\begin{lemma}
+$t_{min} = \tau(a,b) = k_{min}+1 $
+\end{lemma}
+
+\begin{proof}
+We divide the proof of the equation into two inequations
+
+If we could point out a pair $e$ is unbalanced through the optimal graph $F$(with $k_{min}$ comparisons).
+Consider a graph with these $k_{min}$ edges + $e$ which is not a subgraph of ${\cal G}(\pa,\pb)$
+\[t_{min}\leq k_{min}+1\]
+
+For a optimal graph $E$(with $t_{min}$ edges) which is not a subgraph of ${\cal G}(\pa,\pb)$. Let $E'$ = ($E$ remove an arbitrary edge $e$), then through $E'$
+
+If $E'$ has unbalance comparison, we conclude the one is unbalanced, otherwise we could conclude $e$ is unbalanced.
+
+Either case shows $E'$ is enough to end the game.
+\[k_{min} \leq t_{min}-1\]
+
+From the above inequations, the lemma holds.
+
+\end{proof}
+
+\subsection*{Conclusion}
+We want to find a graph $g(\pa,\pb)$ that has minimum edges and $g(\pa,\pb)$ is not a subgraph of ${\cal G}(\pa,\pb)$. Through $g(\pa,\pb)-an arbitrary edge e$, we can point out a pair is unbalanced and it's optimal.

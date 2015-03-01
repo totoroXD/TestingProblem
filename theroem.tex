@@ -1,5 +1,5 @@
 \begin{theorem}
-Any graph with $n \leq \pa + \pb$ vertices and $m \leq \lfloor (a+b)/2 \rfloor-1$ edges $(0<a \leq b)$ 
+Any graph with $n \leq \pa + \pb$ vertices and $m \leq \lfloor (\pa+\pb)/2 \rfloor-1$ edges $(0<\pa \leq \pb)$ 
 is always a subgraph of ${\cal G}(\pa,\pb)$ (or equivalently, a subgraph of ${\cal G}(\pb,\pa)$).
 \end{theorem}
 
@@ -40,7 +40,9 @@ In all cases, $G$ is a subgraph of ${\cal G}(\pa,\pb)$.  This completes the proo
 for all odd number $\pa,\pb$, $\tau(a,b)=\frac{\pa+\pb}{2}$
 \end{corollary}
 
+Consider a graph  $g(a,b)$ that have  $\frac{a+b}{2}$ components, each components have only two nodes. then  $g(\pa,\pb)$ is not a subgraph of  ${\cal G}(\pa,\pb)$, and by Thm2.2, it is the optimal solution.
+
 \begin{theorem} 
-For every $a,b$, we have a 2-approximation solution of  $\tau(a,b)$.
+For every $a,b$, we have a 2-approximation solution of  $\tau(\pa,\pb)$.
 \end{theorem}
-Consider a graph  $g(a,b)$ is a line with $max(a+b)$ nodes.  $g(a,b)$ is not a subgroup of  $G(a,b)$, and by Thm2.2, it is a 2-approximation solution.
+Consider a graph  $g(\pa,\pb)$ is a line with $max(\pa+\pb)$ nodes.  $g(\pa,\pb)$ is not a subgraph of  ${\cal G}(\pa,\pb)$, and by Thm2.2, it is a 2-approximation solution.
