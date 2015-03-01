@@ -86,10 +86,11 @@ $\tau(a,b)=a+b+1-\rho(a,b)$
 
 \begin{algorithmic}
   \STATE{$R= \{\pa+\pb\}$}
-  \FORALL{partition $P$ of a+b}
+  \FOR{\textbf{each} partition $P$ of the number $\pa+\pb$}
     \IF{$P$ avoids $\pa$ \AND{$|P|>|R|$}} \STATE{$R=P$}
     \ENDIF
   \ENDFOR
+  \STATE{output $R$}
 \end{algorithmic}
 check P's avoidence by Dynamic-Programming as solving discrete knapsack problem, keep avoidence vector when enumerating.
 

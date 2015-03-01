@@ -1,22 +1,7 @@
 \section{Introduction}
 \subsection*{Problem description}
-Now we have a's "+" and b's "-", each time we can choose 2 of them to check if they are the same or not.  $\tau(a,b)$ is the minimum number of testing that we can garantee to find a different pair "+" and "-".  \\
+There are $\pa$ real coins and $\pb$ counterfeit coins($0<\pa,\pb$),  real coins have the same weight and so are the counterfeit ones.But a real coin is heavier than a fake one.
+Each comparison compares whether two coins have the same weight or the heavier one if different.
 
-
-\subsection*{Idea}
-Consider a graph G(a,b) contains two part, one is $K_a$, another is $K_b$, then we want to find a graph g(a,b) (vetex is not greater than a+b), ang g(a,b) is not a subgraph of G(a,b). Let $t =$ numer of edge of g(a,b), then through  $t$ testing we can   garantee to find a different pair "+" and "-".  \\
-
-\begin{proof}
-We tesing as edge of g(a,b). If we can't find the pair "+" and "-" after "t" testing, we can assign a's "+" and b's "-" into g(a,b),  then g(a,b) is the subgraph og G(a,b). By contradiction. \\
-\end{proof}
-
-\begin{lemma}
-$\tau(a,b)= min(t)$ 
-\end{lemma}
-
-\begin{proof}
-For any graph contains the nunber of edges is less than $min(t)$, imply the graph is a subgraph of G(a,b), then we can conclude that exist a probability greater than 0 that we can not  find a different pair "+" and "-".
-\end{proof}
-
-\subsection*{Conclusion}
-We want to find a graph g(a,b) that has minimum edges and g(a,b) is not the subgraph of G(a,b), then number of edges of g(a,b) is the answer.
+Assume we know $\pa,\pb$.
+Find the minimum number of comparison that we can garantee to find a real coin and a fake one.

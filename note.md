@@ -31,3 +31,12 @@ Outline
 5. Open Problems
  - cycle 可以更早嗎？
  - Avoidance integer partitioning?
+
+2/25
+def of tau
+close form
+lemma 4.2
+	不用bitset
+thereom 4.3
+	補 a/d
+	

@@ -41,7 +41,7 @@ def table(size, xeven=False, yeven=False):
         if a%2==1 and xeven: continue
         for b in range(1,size+1):
             if b%2==1 and yeven: continue
-            p=a+b-len(count(a,b))
+            p=len(count(a,b))
             logger.debug( a,',',b,':',p)
             table[a][b]=p
     return table
@@ -52,7 +52,7 @@ def triangle_table(size):
     for a in range(1, size+1):
         for b in range(1,size-a+2):
             print >>sys.stderr, a, ',', b
-            p=a+b-len(count(a,b))
+            p=len(count(a,b))
             logger.debug( a,',',b,':',p)
             table[a][b]=p
     return table

@@ -26,93 +26,80 @@ $|S|<a$
 
 We shall prove this by contradiction
 
-We denote the number of $i$ in $S$ as $X_i$, that is, we have $X_i$ '$i$'(s) in $S$.
+We denote the number of $i$ in $S$ as $X_i$, that is, we have $X_i$ '$i$'(s) in $S$
 
-We denote $P_k$ as the first $k$ elements of $S$. $P_0$ is the empty set.
+, the first $k$ elements of $S$ as $S_k$. $S_0$ is the empty set.
 
-We define $SB(s)$ for a multiset $s$ as the $a$+1-bit vector of appearance of subset-sums of $s$, $i$th bit=1 if and only if there is an $i$ in subset-sums of $s$.For example, $\pa=5$, $SB({1,3,3})=bits(\{ 0,1,3,4,6,7\})=110110$, ${6,7}$ is not kept in $SB$ since they are greater than $\pa$
+We define set $U(s)$ for a multiset $s$ as subset-sums$\leq a$ of $s$. For example, $\pa=5$, $U({1,3,3})=ignore_{>5}(\{ 0,1,3,4,6,7\})=\{ 0,1,3,4\}$
 
 % \begin{remark}
-Not that for any $s$, $SB(s)[0]=1$ since subset-sum always has zero.
+Note that for any $s$, $U(s)$ always include zero.
 % \end{remark}
 
 We divide the proof into two sections.
 
-1. $SB(P_{k+1})>SB(P_k) \forall k$ 
+1. $\forall k, |U(P_{k+1})|>|U(P_k)| $ 
 
-Seperately denote the left and right by $sb'$ and $sb$.
+Denote $U(P_{k+1})$ as $u'$ and $U(P_k)$ as $u$.
 
-Prove this by contradiction, if $sb'=sb$ for some k, then 
+Prove this by contradiction, if $|u'|=|u|$ for some $k$, let $w$ is the k+1th element of $S$,then 
+Since $u\subseteq u'$, $u=u'$
 
-$\forall i\geq w,sb'[i] = (sb[i]\ or\ sb[i-w]=sb[i])$($w$ is the k+1th element of $S$) implies
+$\forall i\geq w, i \in u \implies i+w\in u' \implies i+w\in u$
 
-$\forall i\geq w, (sb[i]=0 \implies sb[i-w]=0)$
+Since U always include 0, $0\in u \implies tw\in u \forall t$
 
-Since $S$ avoids $\pa$, sb[i]=0, then $\forall t, sb[i-tw]=0(i-tw\geq 0)$
+$w$ is a factor of $\pa$, thus $w\in u$, contradicts $S$ avoids $\pa$
 
-w is a factor of a, so sb[0]=0, contradicts $SB(s)[0]$ is always $1$
-
-2. We discover $SB(P_0)$ to $SB(P_{|S|})$, since there are intinialy $a$ bits are 0, each time
-$SB$ has at least one bit goes from 0 to 1 and no bit from 1 to 0. If $|S|\geq a$, then $SB(S)[\pa]$
-must be 1, contradicts $S$ avoids $\pa$
+2. We discover $U(S_0)$ to $U(S_{|S|})$, since $U(S_0)=\{0\}$, each time
+$U$ at least a new element. If $|S|\geq \pa$, then $U(S)$
+must be $\{0,1,...,\pa\}$, contradicts $S$ avoids $\pa$
 
 
 \end{proof}
 
-\begin{theorem}
-$\forall b>d(d+1)a$, an optimal partition contains at least $\floor{\frac{a}{d}}$ instances of $d$
+\begin{theorem} 
+$\forall \pb>d(d+1)(\pa-1)  + (\pa - (\pa\mod d)$, an optimal partition contains at least $\floor{{\frac{\pa}{d}}}$ instances of $d$ \\ \\
 \end{theorem}
 
+\begin{proof} 
+    Let $S$ is a partition of $\pa+\pb$ avoids $\pa$,   $X_i$ is the number of times $i$ appears in $S$  and  $X = \sum_i{X_i}$  \\  
 
-\begin{proof}
-    We shall prove this theorem by contradiction.  
+    Assume $X_d<\lfloor{\frac{\pa}{d}} \rfloor $, \\
 
-    $S$ is a partition of a+b avoids $a$
-
-    $X_i$ is the number of times $i$ appears in $S$
-
-    $X = \sum_i{X_i}$
-
-    \begin{equation}
-        \sum_{i<d}{X_i}<a
-    \end{equation}
-
-    if $X_d<\floor{\frac{a}{d}}$,
-
+    Then 
     \begin{align*}
-        X&=\sum_{i<d}{X_i}+X_d+\sum_{i>d}{X_i}\\
-         &<a+\floor{\frac{a}{d}}+\sum_{i>d}{X_i}\\
-         &\leq a+\floor{\frac{b}{d+1}}
+     X&=\sum_{i<d}{X_i}+X_d+\sum_{i>d}{X_i}&\\
+      &<\pa+\floor{\frac{\pa}{d}}   +\sum_{i>d}{X_i} -1  &(by\ lemma\ 4.2)\\
+      &\leq \pa+ \floor{\frac{\pa}{d}}   +\floor{{\frac{\pb-(\pa - (\pa\mod d))}{d+1}}}  -1&
     \end{align*}
 
-    $\forall b>d(d+1)a, X<a+\ceil{\frac{b}{d+1}}\leq \ceil{\frac{b}{d}}$
+     $\forall \pb>d(d+1)(\pa-1) + (\pa - (\pa\mod d)), \\
+     X<\pa+\floor{\frac{\pa}{d}} + \pa d -d \leq \ceil{\frac{\pb}{d}}$.    contradicts lemma 4.1
 
-    S is not optimal
+    Hence  S is not optimal
 \end{proof}
 
 \begin{theorem}
-	$\forall b>d(d+1)a$, $\rho(a,b+d)=\rho(a,b)+1$
+	$\forall \pb>d(d+1)(\pa-1)  + (\pa - (\pa\mod d)$, $\rho(\pa,\pb+d)=\rho(\pa,\pb)+1$
 \end{theorem}
 
 \begin{proof}
+    $S$ is a optimal partition of a+b avoids $a$ ($b>d(d+1)(a-1)  + (a - (a\mod d)$)
     
-    % denote $s\bigoplus x$ as the set after adding x to each element in $s$
+    $S'=S+$'d' is a partition of a+b+d 
 
-    $S$ is a optimal partition of a+b avoids $a$ ($b>d(d+1)a$)
-    
-    $S'=S+'d'$ is a partition of a+b+d 
+    We divide the proof into avoidance part and optimal part
 
-    We divide the proof into subset part and optimal part
+    {\bf(Avoidance)}
+    Prove this by contradiction
 
-    {\bf(Subset)}
+    If $S'$ has subset-sum $\pa$, $S$ must has subset-sum $\pa$ or $\pa-d$. The former is not possible from definition. 
 
-    divide $S$ into 'd's ($D$) and not 'd's($C$)
-    
-    $D$ has at least $\floor{\frac{a}{d}}$ instances of 'd' and $S$ avoids $a$, implies $C$ avoids $\pa-kd (k\geq0)$
+    If the later happens, $S$ has subset-sum $\pa$ since it has at least $\floor{{\frac{a}{d}}}$ instances of 'd', and $\pa-d$ couldn't has all of them.
+    Also contradict definition.
 
-    In the same way, $S'=D'+C'$ ($D'=D+'d', C'=C$)
-
-    Since $C'$ avoids $\pa-kd$, $D'$ consist of only 'd's, $S'$ avoids $\pa$.
+    $S'$ avoids $\pa$.
 
     {\bf(Optimal)}
         prove by contradiction
@@ -127,16 +114,16 @@ $\forall b>d(d+1)a$, an optimal partition contains at least $\floor{\frac{a}{d}}
 \end{proof}
 
 \begin{corollary}
-for a constant $a$, $\rho(a,b)$ forms cycle of length $d$ if b is sufficiently large
+for a constant $\pa$, $\rho(\pa,\pb)$ forms cycle of length $d$ if $\pb$ is sufficiently large
 \end{corollary}
 
 \subsection{Algorithm using cycle property}
 
-let $K=a+b-kd>d(d+1)a$ (choose maximal k)
+let $K=\pa+\pb-kd>d(d+1)a$ (choose maximal k)
 
 \begin{algorithmic}
   \STATE{$R= \{\pa+\pb\}$}
-  \FORALL{partition $P$ of K}
+  \FOR{\textbf{each} partition $P$ of the number K}
     \IF{$P$ avoids $\pa$ \AND{$|P|>|R|$}} \STATE{$R=P$}
     \ENDIF
   \ENDFOR
