@@ -47,6 +47,10 @@ $\rho(\pa,\pb)$ is the maximal number of parts of $\pa+\pb$ avoids $\pa$
 $d$ is the smallest non-factor of $\pa$
 \end{definition}
 
+\begin{remark}
+$\tau(\pa,\pb)=\pa+\pb+1-\rho(\pa,\pb)$
+\end{remark}
+
 \begin{theorem}
 Optimal partition for $\pa=2$
 
@@ -72,15 +76,6 @@ Optimal partition for $\pa=2$
 
 \end{proof}
 
-\begin{definition}
-$\rho(a,b)$ is the maximal number of parts of $a+b$'s partitions that avoids $a$
-
-$d$ is the smallest non-factor of $a$
-\end{definition}
-
-\begin{remark}
-$\tau(a,b)=a+b+1-\rho(a,b)$
-\end{remark}
 
 \subsection{Exact Algorithm}
 
@@ -95,3 +90,6 @@ $\tau(a,b)=a+b+1-\rho(a,b)$
 check P's avoidence by Dynamic-Programming as solving discrete knapsack problem, keep avoidence vector when enumerating.
 
 Time Complexity: $O(\pa\frac{exp(\sqrt{\frac{2(\pa+\pb))}{3} } )}{\pa+\pb})$
+
+\subsection{Results}
+
