@@ -59,7 +59,7 @@ must be $\{0,1,...,\pa\}$, contradicts $S$ avoids $\pa$
 \end{proof}
 
 \begin{theorem} 
-$\forall \pb>d(d+1)(\pa-1)  + (\pa - (\pa\mod d)$, an optimal partition contains at least $\floor{{\frac{\pa}{d}}}$ instances of $d$ \\ \\
+$\forall \pb>d(d+1)(\pa-1)  + (\pa - (\pa\mod d)$, an optimal partition contains at least $\floor{{\frac{\pa}{d}}}$ instances of $d$
 \end{theorem}
 
 \begin{proof} 
@@ -68,14 +68,18 @@ $\forall \pb>d(d+1)(\pa-1)  + (\pa - (\pa\mod d)$, an optimal partition contains
     Assume $X_d<\lfloor{\frac{\pa}{d}} \rfloor $, \\
 
     Then 
-    \begin{align*}
-     X&=\sum_{i<d}{X_i}+X_d+\sum_{i>d}{X_i}&\\
-      &<\pa+\floor{\frac{\pa}{d}}   +\sum_{i>d}{X_i} -1  &(by\ lemma\ 4.2)\\
-      &\leq \pa+ \floor{\frac{\pa}{d}}   +\floor{{\frac{\pb-(\pa - (\pa\mod d))}{d+1}}}  -1&
-    \end{align*}
+    \[
+    X=\sum_{i<d}{X_i}+X_d+\sum_{i>d}{X_i}
+    \]
+    Since $\sum_i{X_i\times i}=\pa+\pb$, to maximize $X$, we use as much small number as possible. Hence
 
-     $\forall \pb>d(d+1)(\pa-1) + (\pa - (\pa\mod d)), \\
-     X<\pa+\floor{\frac{\pa}{d}} + \pa d -d \leq \ceil{\frac{\pb}{d}}$.    contradicts lemma 4.1
+    \begin{align*}
+    X&\leq \pa-1+ \floor{\frac{\pa}{d}}   +\floor{{\frac{\pb-(\pa - (\pa\mod d))}{d+1}}}\\
+     &\leq \pa-1+ \frac{\pa}{d}   +{\frac{\pb-(\pa - (\pa\mod d))}{d+1}}
+    \end{align*}
+    
+    $\forall \pb>d(d+1)(\pa-1) + (\pa - (\pa\mod d)), \\
+    X<\pa+\floor{\frac{\pa}{d}} + \pa d -d \leq \ceil{\frac{\pb}{d}}$.    contradicts lemma 4.1
 
     Hence  S is not optimal
 \end{proof}
@@ -119,16 +123,27 @@ for a constant $\pa$, $\rho(\pa,\pb)$ forms cycle of length $d$ if $\pb$ is suff
 
 \subsection{Algorithm using cycle property}
 
-let $K=\pa+\pb-kd>d(d+1)a$ (choose maximal k)
+let $K=\pa+\pb-kd>d(d+1)a$ (choose maximal $k$, e.g. minimal $K$)
 
 \begin{algorithmic}
   \STATE{$R= \{\pa+\pb\}$}
-  \FOR{\textbf{each} partition $P$ of the number K}
-    \IF{$P$ avoids $\pa$ \AND{$|P|>|R|$}} \STATE{$R=P$}
+  \FOR{\textbf{each} partition $P$ of the number K which avoids $\pa$}
+    \IF{$|P|>|R|$} \STATE{$R=P$}
     \ENDIF
   \ENDFOR
   \STATE{output $R$+k instances of 'd'}
 \end{algorithmic}
 check P's avoidence by Dynamic-Programming as solving discrete knapsack problem, keep avoidence vector when enumerating.
 
-Time Complexity: $O(\pa\frac{exp(\sqrt{\frac{2(d(d+1)\pa))}{3} } )}{d(d+1)\pa})$
+Time Complexity:
+
+Denote the number of partitions of $n$ as $p(n)$
+
+Denote the number of partitions avoids $a$ of $n$ as $p_{aoivds\ a}(n)$
+
+\[
+O(k+a\times p_{aoivds\ \pa}(K))\\
+= O(\pa\times p(K))\\
+= O(\pa\frac{exp(\sqrt{\frac{2(1+d(d+1)(\pa-1)+\pa)}{3} } )}{1+d(d+1)(\pa-1)+\pa})
+= O(\frac{exp(\sqrt{\frac{2(1+d(d+1)(\pa-1)+\pa)}{3} } )}{d^2})
+\]

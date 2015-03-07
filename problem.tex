@@ -1,7 +1,14 @@
 \section{Introduction}
-\subsection*{Problem description}
-There are $\pa$ real coins and $\pb$ counterfeit coins($0<\pa,\pb$),  real coins have the same weight and so are the counterfeit ones.But a real coin is heavier than a fake one.
-Each comparison compares whether two coins have the same weight or the heavier one if different.
 
-Assume we know $\pa,\pb$.
-Find the minimum number of comparison that we can garantee to find a real coin and a fake one. (don't need to know which one is real)
+There is a classic puzzle about counterfeit coin problem: a man has 12 coins among which there has a counterfeit coin, which can only be told apart by its weight. How can one tell in not more than three weighings and determine which one is a counterfeit coin [1].  \\
+
+
+The problem was so popular that have many other variants[2], for example, the weight of counterfeit coin is heavy or light are known; given an extra coin known to be real; or even answer the question by using a spring balance i.e. a weighing device that will return the exact weight. Halbeisen[3] generize this problem when we are allowed to use more than 1 balances and consider more than one counterfeit coin.  \\
+
+
+
+Here we extend this question by a new direction: Now we have $\pa$ real coins and $\pb$ counterfeit coins ($ \pa, \pb > 0$). The real coins are all the same weight and also the counterfeit coins, but two  type are different weight. Each time we compare only two coins have the same weight or not. In this case, assume $\pa$, $\pb$ are known. We want to study the smallest number of comparison that we can guarantee to find a real coin and a fake one (don't need to know which one is real). \\
+
+We compare only two coins in each time which can transfer to a new circumstances: 
+there is an engine broken because of burned wire, and we need to find a pair of new electric wires to fix it, but all the wire are mass up, we only know that we have $\pa$ positive wires and $\pb$ negative wires in the beginning, each time we can choose 2 of them to connect to the engine and check if they are the same Electrical polarity (not work) or not (work). The object is minimize the worst case of testing times that we can fix the engine.  \\
+

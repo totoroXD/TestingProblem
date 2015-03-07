@@ -1,0 +1,10 @@
+\section{Open questions}
+\subsection{Cycle happens earlier}
+    As in theorem 4.3 and 4.4, we proved $\rho(\pa,\pb)$ would be in cycle for $\pb>d(d+1)(\pa-1)+(\pa-(\pa\mod d)$. But observing $\rho$table in Results 3.2, $\rho$ seems to get in cycle earlier. After computer comfirmation, we got results bellow.
+    
+\input{cycleTable.tex}
+    Since the algorithm cost exponential time, we could only comfirm this in small case.
+    
+    But if it get in cycle earlier in general case, we can use a better(smaller) $K$ algorithm 4.1 and run faster.
+\subsection{Avoidance integer partition}
+    As in algorithm 3.1,4.1, to find an optimal solution require enumerating partitions of $\pa+\pb$ avoiding $\pa$. In the algorithms, we enumerating all partitions of $\pa+\pb$ and check if it avoids $\pa$. So the time complexity is analyzed as the (number of partitions) times checking avoidance. If exist a way to enumerate avoidance and bound it tighter, the time complexity would be better.
