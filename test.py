@@ -3,7 +3,7 @@ import sys
 
 logger = logging.getLogger('simple_example')
 
-def count(a,b): #choose max d if tie
+def find_real_fake(a,b): #choose max d if tie
     if a>b: a,b = b,a
     d = min_nonfactor(a)
     def dfs(n, nums,has, res):
@@ -33,23 +33,77 @@ def count(a,b): #choose max d if tie
     has[0]=True;
     dfs(a+b, nums, has, res)
     return res
-def table(size, xeven=False, yeven=False):
+
+def find_fake(a,b):
+    if a>b: a,b = b,a
+    def check(nums):
+        # print nums
+        for i in range(0,len(nums)):
+            v=nums[i]
+            has=[True]+[False]*(a+b)
+            for j in range(0,len(nums)):
+                if i==j: continue
+                u=nums[j]
+                for k in range(a+b-u,-1,-1):
+                    if has[k]: has[k+u]=True
+            # print nums,v,has[b], has[a], has
+            if has[b] and not has[a] and v<=a: 
+                return True
+        return False
+    def dfs(n, nums, res):
+        if len(nums)+n<max(len(res), a):return
+        if n==0:
+            # print nums
+            logger.debug(nums, len(nums))
+            if check(nums):
+                while len(res):res.pop()
+                for m in nums: res.append(m)
+        for v in range(1 if len(nums)==0 else nums[len(nums)-1], n+1):
+            nums.append(v)
+            dfs(n-v,nums,res)
+            nums.pop()
+    res=[]
+    nums=[]
+    dfs(a+b, nums, res)
+    return res
+def rho_table(size):
     table=[x[:] for x in [[0]*size]*size]
     for a in range(1, size+1):
-        if a%2==1 and xeven: continue
         for b in range(1,size+1):
-            if b%2==1 and yeven: continue
-            p=len(count(a,b))
+            p=len(find_real_fake(a,b))
             logger.debug( a,',',b,':',p)
             table[a-1][b-1]=p
     return table
+def tau_table(size):
+    table=rho_table(size)
+    for a in range(1, size+1):
+        for b in range(1,size+1):
+            table[a-1][b-1]=a+b-table[a-1][b-1]
+    return table
+def compare(ta, tb):
+    size=len(ta)
+    table=[x[:] for x in [[0]*size]*size]
+    for i in range(0,size):
+        for j in range(0,size):
+            if ta[i][j]<tb[i][j]:
+                table[i][j]=tb[i][j]-ta[i][j]
+    return table
+def table_fake(size):
+    table=[x[:] for x in [[0]*size]*size]
+    for a in range(1, size+1):
+        for b in range(1,size+1):
+            p=a+b-len(find_fake(a,b))
+            logger.debug( a,',',b,':',p)
+            table[a-1][b-1]=p if p<a+b else 74
+    return table
+
 
 def triangle_table(size):
     table=[x[:] for x in [[0]*size]*size]
     for a in range(1, size+1):
         for b in range(1,size-a+2):
             print >>sys.stderr, a, ',', b
-            p=len(count(a,b))
+            p=len(find_real_fake(a,b))
             logger.debug( a,',',b,':',p)
             table[a-1][b-1]=p
     return table
@@ -62,7 +116,7 @@ def d_in_ar(d, ar):
         if e==d: cnt+=1
     return cnt
 def in_cycle(a,b):
-    res = count(a,b)
+    res = find_real_fake(a,b)
     d = min_nonfactor(a)
     return d_in_ar(d,res) >= a/d
 def cycle_table(size):
