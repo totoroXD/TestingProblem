@@ -13,7 +13,7 @@ def addOutline(table):
 
 rhotab = test.rho_table(20)
 tautab = copy.copy(rhotab)
-kaptab = test.table_fake(15)
+kaptab = test.table_fake(20)
 
 
 for i,row in enumerate(tautab):
@@ -31,4 +31,4 @@ print tabulate(rhotab,['rho(a,b)']+range(1,21),tablefmt="pipe")
 print 
 print tabulate(tautab,['tau(a,b)']+range(1,21),tablefmt="pipe")
 print 
-print tabulate(kaptab,['kappa(a,b)']+range(1,16),tablefmt="pipe")
+print tabulate(kaptab,['kappa(a,b)']+range(1,21),tablefmt="pipe")
