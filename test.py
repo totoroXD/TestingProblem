@@ -48,16 +48,19 @@ def find_fake(a,b):
                     if has[k]: has[k+u]=True
             # print nums,v,has[b], has[a], has
             if has[b] and not has[a] and v<=a: 
-                return True
-        return False
+                #(nums[0],nums[i]) = (nums[i],nums[0])
+                return i
+        return -1
     def dfs(n, nums, res):
         if len(nums)+n<max(len(res), a):return
-        if n==0:
+        if n==0 and len(nums)>len(res):
             # print nums
             logger.debug(nums, len(nums))
-            if check(nums):
+            cc=check(nums)
+            if cc!=-1:
                 while len(res):res.pop()
                 for m in nums: res.append(m)
+                (res[0],res[cc]) = (res[cc],res[0])
         for v in range(1 if len(nums)==0 else nums[len(nums)-1], n+1):
             nums.append(v)
             dfs(n-v,nums,res)
@@ -66,6 +69,38 @@ def find_fake(a,b):
     nums=[]
     dfs(a+b, nums, res)
     return res
+
+
+def q(n, a, b): #a<=b<=b
+    def dfs(n, nums,has, res):
+        if len(nums)+n<len(res):return
+        if n==0:
+            # print nums
+            logger.debug(nums, len(nums))
+            
+            if len(nums)>len(res) and has[b]:
+                while len(res):res.pop()
+                for m in nums: res.append(m)
+        for v in range(1 if len(nums)==0 else nums[len(nums)-1], n+1):
+            nhas=has[:]
+            ok=True
+            for i in range(b,-1,-1):
+                if nhas[i]:
+                    nhas[i+v]=True
+                    if i==a:
+                        ok = False
+                        break
+            if not ok: continue
+            nums.append(v)
+            dfs(n-v,nums,nhas,res)
+            nums.pop()
+    res=[]
+    nums=[]
+    has=[False]*(a+b+1)
+    has[0]=True;
+    dfs(n, nums, has, res)
+    return res
+
 def rho_table(size):
     table=[x[:] for x in [[0]*size]*size]
     for a in range(1, size+1):
