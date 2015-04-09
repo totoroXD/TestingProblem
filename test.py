@@ -2,7 +2,13 @@ import logging
 import sys
 
 logger = logging.getLogger('simple_example')
-
+def subsums(nums):
+    n=sum(nums)
+    has=[True]+[False]*n
+    for v in nums:
+        for j in range(n-v,-1,-1):
+            if has[j]: has[j+v]=True
+    return has
 def find_real_fake(a,b): #choose max d if tie
     if a>b: a,b = b,a
     d = min_nonfactor(a)
