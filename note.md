@@ -9,7 +9,8 @@ c=0
  -b>=d(d+1)aH(p) (proved in cycle.tex)
  -應改有更小的b
 - conject: tau(a,a~2a)=2a (a is even)
-
+- exist tau(a,b-1) include b?
+- conject: min{Q(a+b-i,a,b)|i=1~a-1}=Q(a+b-1,a,b)
 c=1
 - fact: 有比b+2更好的解
 

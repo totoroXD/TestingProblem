@@ -1,0 +1,126 @@
+\section{extended problem}
+Let's consider problem 1, 2 mentioned in the introduction.
+
+We shall solve Problem 1 first, then similarly solve Problem 2.
+
+
+\subsection*{Optimal testing solution for finding a fake coin}
+Similar to Section 2, we could present a solution as a graph.
+
+If after testing a graph, we could solve problem 1.
+This graph is a testing solution for fake ($TS^-$), feasible. Otherwise it's infeasible.
+
+\begin{definition}
+Optimal testing solution for fake ($OTS^-$) is $TS^-$ with minimum number of comparison.
+
+deonte the number of edges of $OTS^-$ as $\tau^-(a,b)$.
+\end{definition}
+
+Note that $OTS(a,b)$ could find a real and a fake coin. Thus $\tau(a,b)$
+is an upper bound of $\tau^+(a,b)$ and $\tau^-(a,b)$.\\
+
+A $TS^-(a,b)$ better than $OTS(a,b)$ must use another strategy, which is, though all comparisons result in balance we could still find a '-'.\\
+
+Before solving $TS^-$, we observe how a solution works.
+
+When claimming a solution, after these comparisons, there are two cases
+
+\textbf{Case 1.} there is an unbalanced
+
+\textbf{Case 2.} they are all balanced
+
+If \textbf{Case 1.} happens then the solution works.
+If \textbf{Case 2.} happens, we must claim a fake coin, and this coin couldn't be a real one in any condition.\\
+
+We can still present a solution as a integer partition.
+
+Example for \textbf{Case 2.} let (a,b)=(2,6)
+the optimal solution is [3,3,'1',1] the '1' is the fake one
+
+Denote the part of the fake coin as $i(i\leq\pa)$. 
+Beyound the remainning $\pa+\pb-i$ parts, 
+
+(1)they must avoid $\pa$, since if there's a subset sum $\pa$, assign the subset '+', this claim is wrong
+
+(2)they must contain $\pa-i$ or equivalently contain $\pb$, since there must exist a condition such that the coin is fake.
+
+
+\begin{definition}
+$Q(n,a,b)$ as the min mumber of XD avoids $a$, but contains $b$ 
+\end{definition}
+
+Note that $Q(n,a,b)\geq\tau(a,n-a)$\\
+
+There are only \textbf{Case 1.} and \textbf{Case 2.}, 
+and for \textbf{Case 2.}, i=1~a for $TS^-$, thus we get the following lemma.
+
+\begin{lemma}
+$\tau^-(\pa,\pb)=min\{\tau(\pa,\pb), \{i-1+Q(\pa+\pb-i,\pa,\pb) | 1\leq i\leq\pa\} \}$
+\end{lemma}
+
+We are ready to solve $OTS^-$ now.
+
+\begin{theorem}
+$OTS^-(\pa,\pb)=optimal\{OTS(a,b), \{\text{a tree of i-1 nodes and }OTS(a,b-i) |1\leq i\leq a\}\}$
+\end{theorem}
+
+\begin{proof}
+We divide the proof into feasible part and optimal part.
+
+\noindent{\bf (Feasible Part:)}
+% $OTS(a,b)$ and $\{\text{a tree of i-1 nodes and }OTS(a,b-i) |for all 1\leq i\leq a\}$ are $TS^-$. 
+
+$OTS(a,b)$ could find a fake coin by definition.
+
+For $\{\text{a tree of i nodes and }OTS(a,b-i) |1\leq i\leq a\}\}$, the i part is real only if 
+
+1. remainning parts contain b-i or 
+
+2. there is at least one unbalanced pair. 
+
+The first condition contradicts definition of $\tau(\pa,\pb-i)$.
+
+If the second condition happens then we get a fake coins from the unbalanced pair, the graph is feasible.
+
+\noindent{\bf (Optimal Part:)}
+from lemma 5.2
+\begin{align*}
+tau^-(a,b)&=min\{tau(a,b),\{i-1+Q(a+b-i,a,b) | 1\leq i\leq a\} \}\\
+&\geq min\{tau(a,b), \{i-1+\tau(a,b-i) | 1\leq i\leq a\} \}
+\end{align*}
+
+is a optimal lower bound.
+
+And $optimal\{OTS(a,b), \{\text{a tree of i nodes and }OTS(a,b-i) |1\leq i\leq a\}\}$ reaches this lower bound.
+
+\end{proof}
+
+\subsection*{Optimal testing solution for finding a real coin}
+
+$OTS^+$ is trivial.
+That is, comparing $\pa$ coins in a group. 
+
+\begin{theorem}
+$OTS^+(\pa,\pb)=\text{a tree of }\pa+1\text{ nodes}$
+\end{theorem}
+\begin{proof}
+We divide the proof into feasible part and optimal part.
+
+\noindent{\bf (Feasible Part:)}
+
+If it results in an unbalanced pair. The heavier coin of the pair is the real one.
+
+If it results in all balanced. This means this group is real.
+
+\noindent{\bf (Optimal Part:)}
+\begin{align*}
+\tau^+(a,b)&=min\{\tau(a,b), \{i-1+Q(a+b-i,b,a) | 1\leq i\leq b\} \}&\\
+&\geq min\{\tau(a,b), \{i-1+\tau(a-i,b) | 1\leq i\leq b\} \} &\text{by Theorem 2.2.}\\
+&\geq min\{\floor{\frac{a+b}{2}}, i-1+\frac{a-i+b}{2}\}&\\
+&\geq min\{a, a\}=a &
+\end{align*}
+
+is a optimal lower bound.
+
+$\text{a tree of }\pa+1\text{ nodes}$ reaches optimal lower bound.
+\end{proof}
