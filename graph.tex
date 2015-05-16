@@ -1,20 +1,53 @@
 \section{An Equivalence Graph Problem}
 
 
-\subsection*{Idea}
 We can present a set of comparisons as a graph. Vertice are the coins, edges are the comparisons.
 
-Consider a graph ${\cal G}(\pa,\pb)$ contains two part, one is $K_\pa$, another is $K_\pb$, then we want to find a graph $g(\pa,\pb)$ (number of vertices $\leq \pa+\pb$), and $g(\pa,\pb)$ is not a subgraph of ${\cal G}(\pa,\pb)$. 
-Let $t =$ number of edges of $g(\pa,\pb)$, then through these $t$ comparisons, at least one of them is unbalanced.
+
+\begin{definition}
+If comparing the edges of a graph results in at least one unbalanced edge in any condition.
+We say this graph is a testing solution, feasible. Otherwise it's infeasible.
+An optimal testing solution(denoted by $OTS$) is a solution with minimum number of edges(comparisons).
+\end{definition}
+
+An $OTS$ can presented by an integer partition as well, which is covered in Section 3.
+
+\subsection*{Idea}
+Consider a graph ${\cal G}(\pa,\pb)$ contains two disjoint cliques, one is $K_\pa$, another is $K_\pb$. The edges in ${\cal G}(\pa,\pb)$ means comparing the pair would results in balanced. Then we want to find a graph $g$ (number of vertices $\leq \pa+\pb$) which is not a subgraph of ${\cal G}(\pa,\pb)$.
+
+\begin{lemma}
+We can guarantee a graph $g$ (number of vertices $\leq \pa+\pb$) has a unbalanced edge iff $g$ is not a subgraph of ${\cal G}(\pa,\pb)$.
+\end{lemma}
 
 \begin{proof}
 
-Prove by contradiction.
+Denote the real coins as '+' and the fake ones as '$-$'. 
 
-Denote the real coins as '+' and the fake ones as '-'. 
-
-We compare edges of g(a,b). If we found all balance in these t comparison, we can assign a '+'s and b '-'s into g(a,b), then g(a,b) is the subgraph of ${\cal G}(\pa,\pb)$.
+We compare edges of $g$. Vertices of $g$ are subset of vertices of ${\cal G}(\pa,\pb)$.
+If $g$ is a subgraph of ${\cal G}(\pa,\pb)$, assign '+'s and '$-$'s from ${\cal G}$ to $g$ , $g$ results in all balance.
+If it's not a subgraph of ${\cal G}(\pa,\pb)$, then at least one edge results in unbalance. We can prove this by contradiction. If $g$ results in all balance, edges in $g$ are either ('+','+') or ('$-$','$-$'), subset of edges of ${\cal G}(\pa,\pb)$, thus $g$ is a subgraph of ${\cal G}(\pa,\pb)$.
 \end{proof}
+
+\begin{figure}[H]
+  \centering
+  \input{G-3-5.tex}
+  \caption{${\cal G}(3,5)$}
+\end{figure}
+
+\begin{figure}[!htb]
+  \minipage{0.3\textwidth}
+    \input{trivial-3-5.tex}
+    \caption{a trivial solution}
+  \endminipage\hfill
+  \minipage{0.3\textwidth}
+    \input{notTS-3-5.tex}
+    \caption{not a solution since it's a subgraph of ${\cal G}(3,5)$, we can assign '+'s and '-'s as in the figure such that all edges are balanced.}
+  \endminipage\hfill
+  \minipage{0.3\textwidth}
+    \input{OTS-3-5.tex}
+    \caption{an optimal solution.}
+  \endminipage
+\end{figure}
 
 Intuitively, if finding unbalance in a comparison, the game ends. But sometimes we can point a pair is unbalance after k comparisons(k is the answer) before the unbalance appears. The following shows $k_{min}=t_{min}-1$, which means the answer for Problem 4 is $t_{min}-1$
 
@@ -29,10 +62,7 @@ If we could point out a pair $e$ is unbalanced through the optimal graph $F$(wit
 Consider a graph with these $k_{min}$ edges + $e$ which is not a subgraph of ${\cal G}(\pa,\pb)$
 \[t_{min}\leq k_{min}+1\]
 
-For a optimal graph $E$(with $t_{min}$ edges) which is not a subgraph of ${\cal G}(\pa,\pb)$. Let $E'$ = ($E$ remove an arbitrary edge $e$), then through $E'$
-
-If $E'$ has unbalance comparison, we conclude the one is unbalanced, otherwise we could conclude $e$ is unbalanced.
-
+For a optimal graph $E$(with $t_{min}$ edges) which is not a subgraph of ${\cal G}(\pa,\pb)$. Let $E'$ = ($E$ remove an arbitrary edge $e$), then through $E'$. If $E'$ has unbalance comparison, we conclude the one is unbalanced, otherwise we could conclude $e$ is unbalanced.
 Either case shows $E'$ is enough to end the game.
 \[k_{min} \leq t_{min}-1\]
 
@@ -42,17 +72,6 @@ From the above inequations, the lemma holds.
 
 \subsection*{Goal}
 We want to find a graph $g(\pa,\pb)$ that has minimum edges and $g(\pa,\pb)$ is not a subgraph of ${\cal G}(\pa,\pb)$. Through testing $g(\pa,\pb)-$an arbitrary edge $e$, we can point out a pair is unbalanced and it's optimal.
-
-If comparing the edges of a graph results in at least one unbalanced edge in any condition.
-We say this graph is a testing solution, feasible. Otherwise it's infeasible.
-
-A testing solution(or a solution) is presented by graph.
-
-\begin{definition}
-An optimal testing solution(denoted by $OTS$) is a solution with minimum number of edges(comparisons).
-\end{definition}
-
-An $OTS$ can presented by an integer partition as well, which is covered in Section 3.
 
 \begin{definition}
 $\tau(\pa,\pb)$ is the number of edges of $OTS(\pa,\pb)$
@@ -64,3 +83,52 @@ In this case, testing a pair is enough to point out a real coin and a fake one.
 
 Denote the coins we test as $coin_a$ $coin_b$ , the coin we didn't test as $coin_c$
 If $coin_a$ and $coin_b$ is not balanced, then point out $coin_a$ and $coin_b$. Otherwise, point out $coin_a$ and $coin_c$
+
+\begin{theorem}
+Any graph with $n \leq \pa + \pb$ vertices and $m \leq \lfloor (\pa+\pb)/2 \rfloor-1$ edges $(0<\pa \leq \pb)$ 
+is always a subgraph of ${\cal G}(\pa,\pb)$ (or equivalently, a subgraph of ${\cal G}(\pb,\pa)$).
+\end{theorem}
+
+\begin{proof}
+We shall prove this theorem by induction.  \\
+
+\noindent
+{\bf (Basis Case:)} If $\pa = \pb =1$, then $\lfloor (\pa+\pb)/2 \rfloor-1 = 0$. Any graph with $n \leq 2$ vertices and $m \leq 0$ edges (i.e., no edges) is always a subgraph of ${\cal G}(1,1)$.
+\\
+
+\noindent
+{\bf (Inductive Case:)} Suppose that the theorem holds for all $\pa + \pb \leq k$.  Our target is to show that the theorem also holds for the case $\pa + \pb = k + 1$ with $\pa \leq \pb$.   Consider a graph $G$ with  $n \leq k+1$ vertices and with $m \leq \lfloor (k+1)/2 \rfloor -1$ edges. 
+
+\begin{enumerate}
+  \item If $G$ is connected, then $n \leq m + 1 \leq (k+1)/2 \leq b$, which is a subgraph of $K_b$, 
+           and thus a subgraph of ${\cal G}(\pa,\pb)$.   
+
+  \item Otherwise, $G$ is not connected.  If $G$ has no edges, then $G$ is obviously a subgraph of ${\cal G}(\pa,\pb,0)$ 
+          since $G$ has at most $\pa+\pb$ vertices.
+          Else, let $C$ be the connected component of $G$ with the largest number $n'$ of vertices (so that $n' \geq 2$.
+          Then, the number of edges in $C$ is at least $n'-1$.  To complete the proof, it is sufficient to show 
+          that $G - C$ is a subgraph of ${\cal G}(\pa, \pb - n')$, as we can map $C$ as a subgraph in $K_b$.
+
+The number of vertices in $G-C$ is $k+1-n' = \pa + (\pb-n')$, and the number of edges of $G-C$ is at most 
+\begin{eqnarray*}
+m - (n'-1) \leq \floor{(k+1)/2} - n' &=& \floor{(k+1)/2 - n'} \\
+&=& \floor{ (k+1-n')/2 - n'/2 } \\
+&\leq& \floor{ (k+1-n')/2 - 1 } \\
+&=& \floor{(k+1-n')/2} - 1 = \floor{ (\pa + (\pb+n'))/2 } - 1.
+\end{eqnarray*}
+By induction hypothesis, $G-C$ is a subgraph of ${\cal G}(\pa, \pb-n')$, 
+and consequently $G$ is a subgraph of ${\cal G}(\pa,\pb)$.
+\end{enumerate}
+In all cases, $G$ is a subgraph of ${\cal G}(\pa,\pb)$.  This completes the proof of the induction case, so that by the principle of mathematical induction, the theorem follows.
+\end{proof}
+
+\begin{corollary}
+for all odd number $\pa,\pb$, $\tau(a,b)=\frac{\pa+\pb}{2}$
+\end{corollary}
+
+Consider a graph  $g(a,b)$ that have  $\frac{a+b}{2}$ components, each components have only two nodes. then  $g(\pa,\pb)$ is not a subgraph of  ${\cal G}(\pa,\pb)$, and by Thm2.2, it is the optimal solution.
+
+\begin{theorem} 
+For every $a,b$, we have a 2-approximation solution of  $\tau(\pa,\pb)$.
+\end{theorem}
+Consider a line with $max(\pa,\pb)$ nodes as in Figure 2. The graph is not a subgraph of  ${\cal G}(\pa,\pb)$, and by Thm2.2, it is a 2-approximation solution.

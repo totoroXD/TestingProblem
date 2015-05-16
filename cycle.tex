@@ -1,5 +1,19 @@
 \section{Futher Speedup}
 
+Previously, to find OTS, we enumerate all partitions of $\pa+\pb$. It cost much time. Discovering from tables in Results 3.3. We found the cycle property. Take $\pa=5$ as example.
+\begin{tabular}{l|rrrrrrrrrrrrrrrrrrrr}
+ $\tau(\pa,\pb)$ &  1 &  2 &  3 &  4 &  5 &  6 &  7 &  8 &  9 & 10 & 11 & 12 & 13 & 14 & 15 & 16 & 17 & 18 & 19 & 20 \\
+\hline
+ 5        &  3 &  4 &  4 &  5 &  5 &  6 &  6 &  8 &  7 & 10 &  8 & 11 &  9 & 12 & 10 & 13 & 11 & 14 & 12 & 15 \\
+\hline
+\end{tabular}
+
+From $\pb\geq 9$, $\tau(\pa,\pb)$ forms cycle of length $2$. In general, when $\pb$ is large enough $\tau(\pa,\pb)$ would forms into cycles.
+Using this property to improve our algorithm for the case $\pb$ is much larger than $\pa$. The improved algorithm runs in time complexity with no $\pb$.
+
+\begin{definition}
+$d$ is the smallest non-factor of $\pa$
+\end{definition}
 \begin{lemma}
 $\rho(a,b)$ has lower-bound $\ceil{\frac{b}{d}}$
 \end{lemma} 
@@ -17,9 +31,7 @@ If the subset doesn't contains $s$, it contains only several $d$, but since $d\n
 \end{proof}
 
 \begin{lemma}
-If a multiset $S$ avoids $a$ and composed only by factors of $a$, 
-
-$|S|<a$
+If a multiset $S$ avoids $a$ and composed only by factors of $a$, $|S|<a$
 \end{lemma}
 
 \begin{proof}

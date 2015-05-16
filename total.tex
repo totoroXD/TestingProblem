@@ -8,9 +8,14 @@
 \usepackage{vmargin}
 \usepackage{multicol}
 \usepackage{graphicx}
+\usepackage{subcaption}
 \usepackage{enumerate}
 \usepackage{mathtools}
 \usepackage{algorithmic}
+\usepackage{tikz}
+\definecolor{violet}{cmyk}{0.79,0.88,0,0}
+
+\tikzstyle{vertex}=[draw,circle,text=violet,minimum width=20pt]
 \setmargrb{19.0mm}{12.0mm}{19.0mm}{12.0mm}%{left}{up}{right}{down}
 
 \DeclarePairedDelimiter\ceil{\lceil}{\rceil}
@@ -31,7 +36,6 @@
 \maketitle
 \input{problem.tex}
 \input{graph.tex}
-\input{theroem.tex}
 \input{partition.tex}
 \input{cycle.tex}
 \input{continue.tex}

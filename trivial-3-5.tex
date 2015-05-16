@@ -1,0 +1,12 @@
+\begin{tikzpicture}[auto, thick]
+\tikzstyle{vertex}=[draw,circle,text=violet,minimum width=10pt]
+  \foreach \place/\name in {{(0,0)/a},
+                            {(1,0)/b},
+                            {(2,0)/c},
+                            {(3,0)/d},
+                            {(4,0)/e},
+                            {(5,0)/f}}
+    \node[vertex] (\name) at \place {};
+  \foreach \source/\dest in {a/b,b/c,c/d,d/e,e/f}
+      \path (\source) edge (\dest);
+\end{tikzpicture}

@@ -11,6 +11,8 @@ if $g(\pa,\pb)$ form a cycle, remove an edge, the number of vertices each compon
 We define a multiset avoids $x$ iff its subset-sums has no $x$, a partition avoids $x$ iff its parts avoids $x$
 \end{definition}
 
+Previously, we didn't consider the coins not compared for $g(\pa,\pb)$. Now we add a single vertex for each coin not compared into $g(\pa,\pb)$. Then the number of vertices of $g(\pa,\pb)$ is $\pa+\pb$.
+
 \begin{theorem}
 
 the problem would be transformed to find a partition of $\pa+\pb$ with  maximal number of parts that avoids $\pa$
@@ -18,10 +20,8 @@ the problem would be transformed to find a partition of $\pa+\pb$ with  maximal 
 \end{theorem}
 
 \begin{proof} 
-Let $t =$ number of edge of $g(\pa,\pb)$
-
-$n$ as number of componets in $g(\pa,\pb)$
-
+Let $t =$ number of edge of $g(\pa,\pb)$, 
+$n$ as number of componets in $g(\pa,\pb)$, 
 $M$ as the set of components
 
 % $m$ as the set of number of vertices
@@ -41,14 +41,12 @@ the sum of $m$ is $\pa+\pb$, so the theorem holds
 \end{proof}
 
 \begin{definition}
-
-We can present an optimal solution as a partition of $\pa+\pb$(OSP).
+We can present an optimal solution as a partition of $\pa+\pb$.
 
 $\rho(\pa,\pb)$ is the maximal number of parts of $\pa+\pb$ avoids $\pa$
-
-$d$ is the smallest non-factor of $\pa$
 \end{definition}
-
+\subsection{Graph Integer partition double-way Transform}
+Transforming acyclic graph to a integer partition is trivial, just make each connected component a integer(the number of vertices). Inverse way transformation is also easy, make a $p_i$-vertices tree for each integer part $p_i$. 
 \begin{remark}
 $\tau(\pa,\pb)=\pa+\pb-\rho(\pa,\pb)$
 \end{remark}
