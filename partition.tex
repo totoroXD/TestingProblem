@@ -1,107 +1,110 @@
-\section{Integer Partition}
+%!TEX root = total.tex
+
+\section{From Graph to Integer Partition}
+This section shows an interesting connection between designing an optimal foolproof scheme and 
+searching for an integer partitioning of some special form.  
+We begin with the following simple lemma, which is crucial in establishing the connection.
+
+\begin{lemma} \label{lem:no-cycle}
+If  ${\cal S}$ is an optimal foolproof scheme, then its corresponding graph $G_{\cal S}$ does 
+not contain any cycle.  
+\end{lemma}
+\begin{proof}
+Suppose on the contrary that $G_{\cal S}$ does.  Then,  we can obtain a graph $G'$ by removing an edge from some cycle in $G_{\cal S}$.  If $G'$ is not be isomorphic to any subgraph of ${\cal G}(\pa,\pb)$, by Theorem~\ref{thm:graph}, this would imply $G'$ corresponds to a foolproof scheme;  furthermore, such a scheme performs fewer comparisons than ${\cal S}$, 
+so that ${\cal S}$ is not optimal.   Otherwise, if $G'$ is isomorphic to some subgraph of ${\cal G}(\pa,\pb)$, then $G_{\cal S}$ would also be isomorphic to some subgraph of ${\cal G}(\pa,\pb)$ (using the same mapping between the vertices), 
+so that ${\cal S}$ is not foolproof by Theorem~\ref{thm:graph}.  
+Contradiction occurs in both cases, and the lemma thus follows. 
+\end{proof}
+
+Based on the above lemma, the graph $G_{\cal S}$ corresponding to an optimal foolproof scheme ${\cal S}$ must be a \emph{forest}.  Indeed, we may observe that the \emph{shape} of each connected tree is not important:  
+Precisely, for each tree $T$ in $G_{\cal S}$ that connects some set $U$ of vertices, we can replace $T$ 
+by any other tree that connects the vertices in $U$, and the resulting scheme remains foolproof.\footnote{%  
+If not, the latter graph is isomorphic to some subgraph of ${\cal G}(\pa,\pb)$, but then $G_{\cal S}$ would also be
+isomorphic to some subgraph of ${\cal G}(\pa,\pb)$ under the same vertex mapping.}  
+Also, after replacing $T$, the new scheme remains optimal as it uses the same number of comparisons.
+This naturally implies that an optimal foolproof scheme is related to some kind of \emph{partitioning} 
+of the integer $\pa + \pb$.  In the following, we shall unveil the property of such a partitioning.  
+We first define a related concept.
+
+\begin{definition}
+Let $P$ be a multiset of positive integers.  
+We say $P$ \emph{avoids} a positive integer $x$ if for any subset $P' \subseteq P$,
+the sum of all integers in $P'$ is not equal to $x$.
+\end{definition}
+
+Let $P = \{ p_1, p_2, \ldots, p_{|P|} \}$ be a multiset of positive integers whose sum is $\pa + \pb$.  
+In other words, $P$ forms an integer partition of $\pa + \pb$.   
+We say a testing scheme ${\cal S}$ \emph{corresponds to} $P$ if $G_{\cal S}$ is a forest whose trees have 
+sizes $p_1, p_2 \ldots, p_{|P|}$, respectively.  Then, we have the following theorem.
+ 
+\begin{theorem} \label{thm:partition}
+Let ${\cal S}$ be a testing scheme whose corresponding graph $G_{\cal S}$ is a forest.
+Then ${\cal S}$ is foolproof if and only if ${\cal S}$ corresponds to a partition $P$ of the integer $\pa+\pb$
+that avoids $\pa$.
+\end{theorem}
+\begin{proof}
+We prove the necessary and sufficient conditions separately, each by contradiction.
+
+\medskip
 
 \noindent
-To find $g(\pa,\pb)$ with minimal number of edges, it's obvious that $g(\pa ,\pb)$ should not form a cycle
+{\bf ($\Rightarrow$)}
+Suppose that ${\cal S}$ is foolproof.  Assume on the contrary that $P$ does not avoid $\pa$, then we can partition $P$ into two subsets $P_\pa$ and $P_\pb$ such that the sum of integers in $P_\pa$ is equal to $\pa$ (and thus, the sum of integers in $P_\pb$ is $\pb$).   
+Then, consider those trees in $G_{\cal S}$ with sizes $p \in P_\pa$, they together would be isomorphic to some subgraph of $K_\pa$;  similarly, the remaining trees in $G_{\cal S}$ would be isomorphic to some subgraph of $K_\pb$.  
+This implies that $G_{\cal S}$ is isomorphic to some subgraph of ${\cal G}(\pa,\pb)$, so that ${\cal S}$ is not foolproof by Theorem~\ref{thm:graph}.  A contradition occurs.
 
-\begin{proof} 
-if $g(\pa,\pb)$ form a cycle, remove an edge, the number of vertices each component remains same, whether $g'(\pa,\pb)$ is the subgraph of ${\cal G}(\pa,\pb)$ is equivalent to whether $g(\pa,\pb)$ is the subgraph of ${\cal G}(\pa,\pb)$
+\medskip
+
+\noindent
+{\bf ($\Leftarrow$)} Suppose that $P$ avoids $\pa$.  Assume on the contrary that ${\cal S}$ is not foolproof.  
+By Theorem~\ref{thm:graph}, $G_{\cal S}$ is isomorphic to some subgraph of ${\cal G}(\pa,\pb)$.   
+Consider a particular isomorphism $f$.  Note that the number of vertices of both $G_{\cal S}$ and ${\cal S}(\pa,\pb)$ are the same, so that $f$ is a bijection between the two vertex sets.  Based on $f$, we can partition the vertices in $G_{\cal S}$ into two groups, where the first group contains those who are mapped to vertices in the $K_\pa$ component of ${\cal G}(\pa,\pb)$, and the second one contains those remaining vertices.  Also, all vertices from the same tree in $G_{\cal S}$ must be in the same group.  By focussing on those trees whose vertices are mapped to the first group, their sizes adds up to $\pa$, so that 
+$P$ does not avoid $\pa$.  A contradiction occurs.
 \end{proof}
 
-\begin{definition}
-We define a multiset avoids $x$ iff its subset-sums has no $x$, a partition avoids $x$ iff its parts avoids $x$
-\end{definition}
+For instance, although the scheme corresponding to Figure~\ref{fig:nonfoolproof} is not foolproof when $\pa = 3$ and $\pb = 5$, it is foolproof when $\pa = 1$ and $\pb = 7$, or when $\pa = 4$ and $\pb = 4$.  Also, we have the following corollary.
 
-Previously, we didn't consider the coins not compared for $g(\pa,\pb)$. Now we add a single vertex for each coin not compared into $g(\pa,\pb)$. Then the number of vertices of $g(\pa,\pb)$ is $\pa+\pb$.
-
-\begin{theorem}
-
-the problem would be transformed to find a partition of $\pa+\pb$ with  maximal number of parts that avoids $\pa$
-
-\end{theorem}
-
-\begin{proof} 
-Let $t =$ number of edge of $g(\pa,\pb)$, 
-$n$ as number of componets in $g(\pa,\pb)$, 
-$M$ as the set of components
-
-% $m$ as the set of number of vertices
-
-% $m_i$  as number of vertices of $i$th component
-
-since $g(a,b)$ doesn't contain any cycle, $t = \pa+\pb - n$, to find minimal t is equivalent to find maximal n such that $g(\pa,\pb)$ is not the subgraph of ${\cal G}(\pa,\pb)$
-
-if $g(\pa,\pb)$ is the subgraph of ${\cal G}(\pa,\pb)$, 
-since each component is conected, each one is either in $K_a$ or $K_b$, there exist a subset of M in $K_a$ the number of vertices of M = a
-,e.g there exist a subset of m is equal to $a$
-
-if $g(\pa,\pb)$ is not the subgraph ${\cal G}(\pa,\pb)$, there must not a subset of m is equal to $a$, since if there subset of m is equal to $a$ let these componets in $K_a$ and others in $K_b$, then $g(\pa,\pb)$ is the subgraph ${\cal G}(\pa,\pb)$ thus raise contradiction
-
-the sum of $m$ is $\pa+\pb$, so the theorem holds
-
-\end{proof}
-
-\begin{definition}
-We can present an optimal solution as a partition of $\pa+\pb$.
-
-$\rho(\pa,\pb)$ is the maximal number of parts of $\pa+\pb$ avoids $\pa$
-\end{definition}
-\subsection{Graph Integer partition double-way Transform}
-Transforming acyclic graph to a integer partition is trivial, just make each connected component a integer(the number of vertices). Inverse way transformation is also easy, make a $p_i$-vertices tree for each integer part $p_i$. 
-\begin{remark}
-$\tau(\pa,\pb)=\pa+\pb-\rho(\pa,\pb)$
-\end{remark}
-
-\begin{theorem}
-Optimal partition for $\pa=2$
-
-\[
- \rho(2,\pb) =
-   \begin{cases}
-     1+\frac{\pb}{3}   &\mbox{if }\pb\equiv0\\
-     1+\frac{\pb-1}{3} &\mbox{if }\pb\equiv1\\
-     1+\frac{\pb+1}{3} &\mbox{if }\pb\equiv2
-   \end{cases}
-   \pmod{3}
-\]
-\end{theorem}
-
+\begin{corollary} \label{cor:maximize-|P|}
+Let ${\cal S}$ be an optimal testing scheme.
+Then, ${\cal S}$ corresponds to a partition $P_{\max}$ of $\pa+\pb$, with the maximal number of parts, that avoids $\pa$; furthermore, $\tau(\pa,\pb) = \pa + \pb - |P_{\max}|$, where the notation $|P|$ denotes the number of parts in a partition $P$.
+\end{corollary}
 \begin{proof}
-	since there is no $a$ in subset sums of the partition $P$, there is at most one '$1$' and no '$2$' in $P$, $|P|\leq \floor{\frac{\pb+2}{3}}$
-
-	for $\pb\equiv0\pmod{3}$, there exist an optimal partition $P=\{1,4,3,...\}$('...' are '$3$'s) that reaches optimal bound and avoids $\pa$
-
-	for $\pb\equiv1\pmod{3}$, there exist an optimal partition $P=\{1,5,3,...\}$('...' are '$3$'s) that reaches optimal bound and avoids $\pa$
-
-	for $\pb\equiv2\pmod{3}$, there exist an optimal partition $P=\{1,3,3,...\}$('...' are '$3$'s) that reaches optimal bound and avoids $\pa$
-
+By Lemma~\ref{lem:no-cycle}, $G_{\cal S}$ is a forest.  
+Then, by Theorem~\ref{thm:partition}, ${\cal S}$ corresponds to a partition $P$ of $\pa + \pb$ that avoids $\pa$.
+Furthermore, the number of comparisons performed by ${\cal S}$
+is exactly $\pa + \pb - |P|$.  As ${\cal S}$ is optimal, this implies ${\cal S}$ minimizes the number of comparisons, 
+so that the corresponding partition $P$ maximizes the number of parts.  The corollary thus follows.
 \end{proof}
 
-
-\subsection{Exact Algorithm}
-
-\begin{algorithmic}
-  \STATE{$R= \{\pa+\pb\}$}
-  \FOR{\textbf{each} partition $P$ of the number $\pa+\pb$ which avoids $\pa$}
-    \IF{$|P|>|R|$} \STATE{$R=P$}
-    \ENDIF
-  \ENDFOR
-  \STATE{output $R$}
-\end{algorithmic}
-check P's avoidence by Dynamic-Programming as solving discrete knapsack problem, keep avoidence vector when enumerating.
-
-Denote the number of partitions of $n$ as $p(n)$
-
-Denote the number of partitions avoids $a$ of $n$ as $p_{aoivds\ a}(n)$
-
-Time Complexity: 
-
+\begin{corollary}
+For any $\pb \geq 1$, 
 \[
-O(a\times p_{aoivds\ \pa}(\pa+\pb))\\
-\leq O(\pa\times p(\pa+\pb))\\
-\leq O(\pa\frac{exp(\sqrt{\frac{2(\pa+\pb))}{3} } )}{\pa+\pb})
+    \tau(2,\pb) = \pb + 2 - \myfloor{\frac{\pb+2}{3}}.
 \]
+\end{corollary}
+\begin{proof}
+For any partition $P$ of $2 + \pb$ that avoids $2$, $P$ contains at most one $1$ and no $2$s, so that 
+\[ |P|\  \leq\ \max\, \left\{\, 1 + \frac{\pb+1}{3},\ \; \frac{\pb+2}{3}\ \right\}\ \leq\ 1 + \frac{\pb+1}{3} \ =\ \frac{\pb+4}{3}.\]  
+Furthermore, since $|P|$ is an integer, the above inequality implies that
+\[ |P|\ \leq\ \myceil{\frac{\pb+4}{3}}\ =\ \myfloor{\frac{\pb+2}{3}}.\footnote{%
+The equality follows from the fact: for any integer $n$ and any positive integer $m$, 
+$\myceil{n/m} = \myfloor{(n+m-1)/m}$.}
+\]
+Thus by Corollary~\ref{cor:maximize-|P|}, we have  $\tau(2,\pb) \geq \pb + 2 - \myfloor{(\pb+2)/3}$.
 
-\pagebreak
-\subsection{Results}
-\input{rhotauTable.tex}
-\pagebreak
+\medskip
+
+\noindent
+However, by setting $P$ to be
+\begin{itemize}
+\setlength{\itemsep}{-1pt}
+\item  $P=\{3,3, \ldots \}$ \ \ \ (where $\ldots$ represents trailing $3$s) for $\pb + 2 \equiv 0 \  (\bmod\ 3)$, or
+\item  $P=\{4,3, \ldots \}$ \ \ \ (where $\ldots$ represents trailing $3$s) for $\pb + 2 \equiv 1 \  (\bmod\ 3)$, or
+\item  $P=\{1,4,3, \ldots \}$ (where $\ldots$ represents trailing $3$s) for $\pb + 2 \equiv 2 \  (\bmod\ 3)$,
+\end{itemize}
+each partition $P$ is a partition of $2 + \pb$ that avoids $2$, and with $|P| = \myfloor{(\pb+2)/3}$.
+By Corollary~\ref{cor:maximize-|P|}, this implies that $\tau(2,\pb) \leq \pb + 2 - \myfloor{(\pb+2)/3}$.  
+As $\tau(2,\pb)$ is now upper-bounded and lower-bounded by the same desired quantity, 
+the corollary thus follows.
+\end{proof}
+

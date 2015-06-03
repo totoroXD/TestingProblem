@@ -1,4 +1,31 @@
-\section{Futher Speedup}
+\section{Computing $\tau(\pa,\pb)$}
+
+\begin{algorithmic}
+  \STATE{$R= \{\pa+\pb\}$}
+  \FOR{\textbf{each} partition $P$ of the number $\pa+\pb$ which avoids $\pa$}
+    \IF{$|P|>|R|$} \STATE{$R=P$}
+    \ENDIF
+  \ENDFOR
+  \STATE{output $R$}
+\end{algorithmic}
+check P's avoidence by Dynamic-Programming as solving discrete knapsack problem, keep avoidence vector when enumerating.
+
+Denote the number of partitions of $n$ as $p(n)$
+
+Denote the number of partitions avoids $a$ of $n$ as $p_{aoivds\ a}(n)$
+
+Time Complexity: 
+
+\[
+O(a\times p_{aoivds\ \pa}(\pa+\pb))\\
+\leq O(\pa\times p(\pa+\pb))\\
+\leq O(\pa\frac{exp(\sqrt{\frac{2(\pa+\pb))}{3} } )}{\pa+\pb})
+\]
+
+\pagebreak
+\subsection{Results}
+\input{rhotauTable.tex}
+\pagebreak
 
 Previously, to find OTS, we enumerate all partitions of $\pa+\pb$. It cost much time. Discovering from tables in Results 3.3. We found the cycle property. Take $\pa=5$ as example.
 \begin{tabular}{l|rrrrrrrrrrrrrrrrrrrr}

@@ -8,30 +8,36 @@
 \usepackage{vmargin}
 \usepackage{multicol}
 \usepackage{graphicx}
+\usepackage{caption}
 \usepackage{subcaption}
 \usepackage{enumerate}
 \usepackage{mathtools}
 \usepackage{algorithmic}
 \usepackage{tikz}
 \definecolor{violet}{cmyk}{0.79,0.88,0,0}
+\long\def\symbolfootnote[#1]#2{\begingroup%
+\def\thefootnote{\fnsymbol{footnote}}\footnote[#1]{#2}\endgroup}
 
 \tikzstyle{vertex}=[draw,circle,text=violet,minimum width=20pt]
 \setmargrb{19.0mm}{12.0mm}{19.0mm}{12.0mm}%{left}{up}{right}{down}
 
 \DeclarePairedDelimiter\ceil{\lceil}{\rceil}
 \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\providecommand{\myceil}[1]{\left \lceil #1 \right \rceil }
+\providecommand{\myfloor}[1]{\left \lfloor #1 \right \rfloor }
 
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{corollary}{Corollary}[theorem]
-\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\newtheorem{lemma}{Lemma}
 \newtheorem{definition}{Definition}
 \newtheorem*{remark}{Remark}
 \newcommand{\pa}{\mathtt{a}}
 \newcommand{\pb}{\mathtt{b}}
+\newcommand{\pl}{\mathtt{l}}
 
-\title{Finding Counterfeit Coin by Pairwise Comparisons}
-\author{}
-
+\title{Exact Bounds for Coin Weighing \\ by Pairwise Comparisons}
+\author{Te-Sheng Tan\footnote{Tan and Wu are co-first authors and main contributors of this work.} \and Dai-Yang Wu$^\fnsymbol{footnote}$ \and Wing-Kai Hon}
+\date{}
 \begin{document}
 \maketitle
 \input{problem.tex}

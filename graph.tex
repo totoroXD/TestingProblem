@@ -1,54 +1,76 @@
-\section{An Equivalence Graph Problem}
 
+%!TEX root=total.tex
 
-We can present a set of comparisons as a graph. Vertice are the coins, edges are the comparisons.
+\newcommand\comment[1]{}
 
+\section{An Equivalent Graph Problem}
+
+We can represent a testing scheme ${\cal S}$ for the coin-weighing problem by a graph $G_{\cal S}$ as follows: 
+\begin{enumerate}
+\setlength{\itemsep}{0pt}
+\item It contains $\pa + \pb$ vertices, where each vertex represents a distinct coin.
+\item Two vertices are joined by an edge if and only if ${\cal S}$ compares the two corresponding coins.  
+\end{enumerate}
+Note that we cannot gain extra information by comparing the same pair of coins twice;  WLOG, we assume that each pair of coins are compared at most once.
 
 \begin{definition}
-If comparing the edges of a graph results in at least one unbalanced edge in any condition.
-We say this graph is a testing solution, feasible. Otherwise it's infeasible.
-An optimal testing solution(denoted by $OTS$) is a solution with minimum number of edges(comparisons).
+For a coin-weighing problem with $\pa$ real coins and $\pb$ fake coins, 
+we say a testing scheme ${\cal S}$ is \emph{foolproof} if no matter how $\pa$ vertices in $G_{\cal S}$ 
+are assigned as real and the remaining vertices are assigned as fake, $G_{\cal S}$ contains at least 
+an \emph{unbalanced} edge whose endpoints are with different labels;  else, ${\cal S}$ is \emph{non-foolproof}.
 \end{definition}
 
-An $OTS$ can presented by an integer partition as well, which is covered in Section 3.
+Suppose that $\pa = 3$ and $\pb = 5$.  Figure~\ref{fig:foolproof} shows two different foolproof schemes, while Figure~\ref{fig:nonfoolproof} shows a non-foolproof scheme.
 
-\subsection*{Idea}
-Consider a graph ${\cal G}(\pa,\pb)$ contains two disjoint cliques, one is $K_\pa$, another is $K_\pb$. The edges in ${\cal G}(\pa,\pb)$ means comparing the pair would results in balanced. Then we want to find a graph $g$ (number of vertices $\leq \pa+\pb$) which is not a subgraph of ${\cal G}(\pa,\pb)$.
-
-\begin{lemma}
-We can guarantee a graph $g$ (number of vertices $\leq \pa+\pb$) has a unbalanced edge iff $g$ is not a subgraph of ${\cal G}(\pa,\pb)$.
-\end{lemma}
-
-\begin{proof}
-
-Denote the real coins as '+' and the fake ones as '$-$'. 
-
-We compare edges of $g$. Vertices of $g$ are subset of vertices of ${\cal G}(\pa,\pb)$.
-If $g$ is a subgraph of ${\cal G}(\pa,\pb)$, assign '+'s and '$-$'s from ${\cal G}$ to $g$ , $g$ results in all balance.
-If it's not a subgraph of ${\cal G}(\pa,\pb)$, then at least one edge results in unbalance. We can prove this by contradiction. If $g$ results in all balance, edges in $g$ are either ('+','+') or ('$-$','$-$'), subset of edges of ${\cal G}(\pa,\pb)$, thus $g$ is a subgraph of ${\cal G}(\pa,\pb)$.
-\end{proof}
-
-\begin{figure}[H]
+\begin{figure}[!htb]
   \centering
-  \input{G-3-5.tex}
-  \caption{${\cal G}(3,5)$}
+  \begin{subfigure}[b]{0.45\textwidth}
+    \centering \input{trivial-3-5.tex} \vspace*{2.5ex}
+    \caption{A scheme with 5 comparisons}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.45\textwidth}
+    \centering \input{OTS-3-5.tex}
+    \caption{A scheme with 4 comparisons}
+  \end{subfigure}
+  \caption{Two foolproof schemes for $\pa = 3$ and $\pb = 5$.  Isolated vertices are omitted for brevity.} \label{fig:foolproof}
 \end{figure}
 
 \begin{figure}[!htb]
-  \minipage{0.3\textwidth}
-    \input{trivial-3-5.tex}
-    \caption{a trivial solution}
-  \endminipage\hfill
-  \minipage{0.3\textwidth}
-    \input{notTS-3-5.tex}
-    \caption{not a solution since it's a subgraph of ${\cal G}(3,5)$, we can assign '+'s and '-'s as in the figure such that all edges are balanced.}
-  \endminipage\hfill
-  \minipage{0.3\textwidth}
-    \input{OTS-3-5.tex}
-    \caption{an optimal solution.}
-  \endminipage
+   \centering
+    \input{notTS-3-5.tex} \vspace*{2.5ex}
+    \caption{A non-foolproof scheme for $\pa = 3$ and $\pb = 5$:  
+                 If the leftmost $\pa$ vertices are assigned as real, there is no unbalanced edge.} \label{fig:nonfoolproof}
 \end{figure}
 
+\medskip
+
+Let ${\cal G}(\pa,\pb)$ be a graph formed by the union of two cliques $K_\pa$ and $K_\pb$ of sizes $\pa$ and $\pb$, respectively.  We have the following theorem.
+
+\begin{theorem} \label{thm:graph}
+A testing scheme ${\cal S}$ is foolproof if and only if $G_{\cal S}$ is not isomorphic to any subgraph of ${\cal G}(\pa,\pb)$. 
+\end{theorem}
+\begin{proof}
+Suppose that $G_{\cal S}$ is isomorphic to some subgraph of ${\cal G}(\pa,\pb) = K_\pa \cup K_\pb$. 
+Then, we may select an arbitrary isomorphism, and label as real for all those $\pa$ vertices in $G_{\cal S}$ that are mapped to the vertices in $K_\pa$, while label as fake for the remaining $\pb$ vertices.  Under such a labeling, there will be no unbalanced edge, so that ${\cal S}$ is non-foolproof.
+
+\smallskip
+
+Conversely, if ${\cal S}$ is non-foolproof, there exists a way to label $\pa$ vertices in $G_{\cal S}$ as real and the remaining $\pb$ vertices as fake so that there is no unbalanced edge.  In other words, $G_{\cal S}$ can be partitioned into two sugraphs with $\pa$ and $\pb$ vertices, respectively;  the former one is isomorphic to a subgraph of $K_\pa$ and the latter one is isomorphic to a subgraph of $K_\pb$,  so that $G_{\cal S}$ is isomorphic to a subgraph of ${\cal G}(\pa,\pb)$.
+\end{proof}
+
+\begin{definition}
+For a coin-weighing problem with $\pa$ real coins and $\pb$ fake coins, 
+we say a foolproof testing scheme ${\cal S}$ is \emph{optimal} if it requires the minimal number of 
+comparisons in the worst case;  the minimal number of comparisons is denoted by $\tau(\pa,\pb)$.
+\end{definition}
+\noindent
+{\it Remark.} By  definition, $\tau(\pa,\pb) = \tau(\pb,\pa)$.
+
+\bigskip
+
+The target of this paper is to design optimal foolproof testing scheme so that by comparing coins according to the scheme, we are guaranteed to compare a real coin with a fake coin using the fewest comparisons in the worst case.  By Theorem~\ref{thm:graph}, it is equivalent to finding a graph $G$, with the fewest number of edges, that is not isomorphic to any subgraph of ${\cal G}(\pa,\pb)$. 
+
+\comment{
 Intuitively, if finding unbalance in a comparison, the game ends. But sometimes we can point a pair is unbalance after k comparisons(k is the answer) before the unbalance appears. The following shows $k_{min}=t_{min}-1$, which means the answer for Problem 4 is $t_{min}-1$
 
 \begin{lemma}
@@ -70,44 +92,45 @@ From the above inequations, the lemma holds.
 
 \end{proof}
 
-\subsection*{Goal}
-We want to find a graph $g(\pa,\pb)$ that has minimum edges and $g(\pa,\pb)$ is not a subgraph of ${\cal G}(\pa,\pb)$. Through testing $g(\pa,\pb)-$an arbitrary edge $e$, we can point out a pair is unbalanced and it's optimal.
-
-\begin{definition}
-$\tau(\pa,\pb)$ is the number of edges of $OTS(\pa,\pb)$
-\end{definition}
-
-For example, $\tau(1,2)=2$, since testing a pair may result in balanced. On the other hand, testing two non-duplicate pair, one of them must results in unbalanced.
 
 In this case, testing a pair is enough to point out a real coin and a fake one. 
 
 Denote the coins we test as $coin_a$ $coin_b$ , the coin we didn't test as $coin_c$
 If $coin_a$ and $coin_b$ is not balanced, then point out $coin_a$ and $coin_b$. Otherwise, point out $coin_a$ and $coin_c$
+}
 
-\begin{theorem}
-Any graph with $n \leq \pa + \pb$ vertices and $m \leq \lfloor (\pa+\pb)/2 \rfloor-1$ edges $(0<\pa \leq \pb)$ 
-is always a subgraph of ${\cal G}(\pa,\pb)$ (or equivalently, a subgraph of ${\cal G}(\pb,\pa)$).
+
+\subsection{Lower Bound}
+
+\begin{theorem} \label{thm:graph-lowerbound}
+Any graph with $n \leq \pa + \pb$ vertices and $m \leq \lfloor (\pa+\pb)/2 \rfloor-1$ edges 
+is always isomorphic to some subgraph of ${\cal G}(\pa,\pb)$.
 \end{theorem}
 
 \begin{proof}
-We shall prove this theorem by induction.  \\
+Without loss of generality, we assume that $\pa \leq \pb$.  We shall prove this theorem by induction on the sum $\pa + \pb$. 
+
+\medskip
 
 \noindent
-{\bf (Basis Case:)} If $\pa = \pb =1$, then $\lfloor (\pa+\pb)/2 \rfloor-1 = 0$. Any graph with $n \leq 2$ vertices and $m \leq 0$ edges (i.e., no edges) is always a subgraph of ${\cal G}(1,1)$.
-\\
+{\bf (Basis Case:)} If $\pa = \pb =1$, then $\lfloor (\pa+\pb)/2 \rfloor-1 = 0$. Any graph with $n \leq 2$ vertices and $m \leq 0$ edges (i.e., no edges) is always isomorphic to some subgraph of ${\cal G}(1,1)$.
+
+\medskip
 
 \noindent
 {\bf (Inductive Case:)} Suppose that the theorem holds for all $\pa + \pb \leq k$.  Our target is to show that the theorem also holds for the case $\pa + \pb = k + 1$ with $\pa \leq \pb$.   Consider a graph $G$ with  $n \leq k+1$ vertices and with $m \leq \lfloor (k+1)/2 \rfloor -1$ edges. 
 
 \begin{enumerate}
-  \item If $G$ is connected, then $n \leq m + 1 \leq (k+1)/2 \leq b$, which is a subgraph of $K_b$, 
-           and thus a subgraph of ${\cal G}(\pa,\pb)$.   
+  \item If $G$ is connected, then $n \leq m + 1 \leq (k+1)/2 \leq b$, which is isomorphic to some subgraph of $K_\pb$, 
+           and thus isomorphic to some subgraph of ${\cal G}(\pa,\pb)$.   
 
-  \item Otherwise, $G$ is not connected.  If $G$ has no edges, then $G$ is obviously a subgraph of ${\cal G}(\pa,\pb,0)$ 
-          since $G$ has at most $\pa+\pb$ vertices.
-          Else, let $C$ be the connected component of $G$ with the largest number $n'$ of vertices (so that $n' \geq 2$.
+  \item Otherwise, $G$ is not connected.  
+           If $G$ has no edges, then $G$ is obviously isomorphic to some subgraph of ${\cal G}(\pa,\pb)$ 
+           since $G$ has at most $\pa+\pb$ vertices.
+           Else, let $C$ be the connected component of $G$ with the largest number $n'$ of vertices (so that $n' \geq 2$.
           Then, the number of edges in $C$ is at least $n'-1$.  To complete the proof, it is sufficient to show 
-          that $G - C$ is a subgraph of ${\cal G}(\pa, \pb - n')$, as we can map $C$ as a subgraph in $K_b$.
+          that $G - C$ is isomorphic to some subgraph of ${\cal G}(\pa, \pb - n')$, 
+         as we can map the vertices of $C$ to an arbitrary set of $n'$ vertices in the $K_\pb$ component of ${\cal G}(\pa,\pb)$.
 
 The number of vertices in $G-C$ is $k+1-n' = \pa + (\pb-n')$, and the number of edges of $G-C$ is at most 
 \begin{eqnarray*}
@@ -116,19 +139,41 @@ m - (n'-1) \leq \floor{(k+1)/2} - n' &=& \floor{(k+1)/2 - n'} \\
 &\leq& \floor{ (k+1-n')/2 - 1 } \\
 &=& \floor{(k+1-n')/2} - 1 = \floor{ (\pa + (\pb+n'))/2 } - 1.
 \end{eqnarray*}
-By induction hypothesis, $G-C$ is a subgraph of ${\cal G}(\pa, \pb-n')$, 
-and consequently $G$ is a subgraph of ${\cal G}(\pa,\pb)$.
+By induction hypothesis, $G-C$ is isomorphic to a subgraph of ${\cal G}(\pa, \pb-n')$, 
+and consequently $G$ is isomorphic to some subgraph of ${\cal G}(\pa,\pb)$.
 \end{enumerate}
-In all cases, $G$ is a subgraph of ${\cal G}(\pa,\pb)$.  This completes the proof of the induction case, so that by the principle of mathematical induction, the theorem follows.
+In both cases, $G$ is isomorphic to a subgraph of ${\cal G}(\pa,\pb)$.  
+This completes the proof of the induction case, so that by the principle of mathematical induction, the theorem follows.
+\end{proof}
+
+Immediately, we have the following corollaries.
+
+\begin{corollary} \label{cor:lowerbound}
+For any $\pa$ and $\pb$, $\tau(\pa,\pb) \geq \lfloor(\pa+\pb)/2 \rfloor$.
+\end{corollary}
+\begin{proof}
+The corollary is a direct consequence of Theorems~\ref{thm:graph} and~\ref{thm:graph-lowerbound}.
 \end{proof}
 
 \begin{corollary}
-for all odd number $\pa,\pb$, $\tau(a,b)=\frac{\pa+\pb}{2}$
+When $\pa$ and $\pb$ are both odd, $\tau(\pa,\pb)= (\pa+\pb)/2$.
 \end{corollary}
+\begin{proof}
+Consider a testing scheme ${\cal S}$ that partitions the coins into $(\pa+\pb)/2$ pairs, and then compares each pair of coins.
+The corresponding graph $G_{\cal S}$ consists of $(\pa+\pb)/2$ disjoint edges (as in Figure~\ref{fig:foolproof}(b)), 
+and is not isomorphic to any subgraph of ${\cal G}(\pa,\pb)$.  Thus, $G_{\cal S}$ is foolproof, and $\tau(\pa,\pb) \leq (\pa+\pb)/2$.  On the other hand, by Corollary~\ref{cor:lowerbound}, we have $\tau(\pa,\pb) \geq (\pa+\pb)/2$ for odd 
+$\pa$ and odd $\pb$.  The corollary thus follows.
+\end{proof}
 
-Consider a graph  $g(a,b)$ that have  $\frac{a+b}{2}$ components, each components have only two nodes. then  $g(\pa,\pb)$ is not a subgraph of  ${\cal G}(\pa,\pb)$, and by Thm2.2, it is the optimal solution.
-
-\begin{theorem} 
-For every $a,b$, we have a 2-approximation solution of  $\tau(\pa,\pb)$.
-\end{theorem}
-Consider a line with $max(\pa,\pb)$ nodes as in Figure 2. The graph is not a subgraph of  ${\cal G}(\pa,\pb)$, and by Thm2.2, it is a 2-approximation solution.
+\begin{corollary} 
+Consider a testing scheme ${\cal S}$ whose corresponding graph $G_{\cal S}$ forms a path with $\max(\pa,\pb) + 1$ nodes (as in Figure~\ref{fig:foolproof}(a)).  Then, ${\cal S}$ is foolproof, and it uses at most twice the number of comparisons 
+of any optimal foolproof scheme.  
+\end{corollary}
+\begin{proof}
+The graph $G_{\cal S}$ is not isomorphic to any subgraph of  ${\cal G}(\pa,\pb)$, so that it is foolproof.  The number of comparisons by ${\cal S}$ is 
+\begin{eqnarray*}
+\max(\pa,\pb) &\leq& \pa + \pb - 1 \ \ \ \ \ \ \ \ \ \ =\ \ \ 2 \times ( (\pa + \pb - 1)/2 ) \\
+&\leq& 2 \times \lfloor (\pa + \pb)/ 2 \rfloor \ \ \leq\ \ \  2 \times \tau(\pa,\pb),
+\end{eqnarray*}
+where the last inequality comes from Corollary~\ref{cor:lowerbound}.  The corollary thus follows.
+\end{proof}
