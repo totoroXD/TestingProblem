@@ -1,25 +1,27 @@
+
 \section{Introduction}
 
 There is a classic puzzle about counterfeit coin problem: a man has 12 coins among which there has a counterfeit coin, which can only be told apart by its weight. How can one tell in not more than three weighings and determine which one is a counterfeit coin [1].  \\
 
 
-The problem was so popular that have many other variants[2], for example, the weight of counterfeit coin is heavy or light are known; given an extra coin known to be real; or even answer the question by using a spring balance i.e. a weighing device that will return the exact weight. Halbeisen[3] generize this problem when we are allowed to use more than 1 balances and consider more than one counterfeit coin.  \\
+The problem was so popular that have many other variants [2]. For example, the weight of counterfeit coin is heavy or light are known; given an extra coin known to be real; or even answer the question by using a spring balance i.e. a weighing device that will return the exact weight. Halbeisen [3] generize this problem when we are allowed to use more than one balances and consider more than one counterfeit coin. 
+Although there is a lot of literature about counterfeit coin problem, but most of these solve the asymptotic bounds [4, 5, 6, 7]. 
+Our specialty is that we solve the exact bounds. \\
 
 
 
-Here we extend this question by a new direction: Now we have $\pa$ real coins and $\pb$ counterfeit coins ($ \pa, \pb > 0$). The real coins are all the same weight and so are the counterfeit ones, but weight of a fake coin is less than weight of a real coin. Each time we compare only two coins have the same weight or not. In this case, assume $\pa$, $\pb$ are known. We want to study the smallest number of comparisons that we can guarantee to find 
+Here we extend this question by a new direction: now we have $a$ real coins and $b$ counterfeit coins ($ a, b > 0$). The real coins are all the same weight and also the counterfeit coins, but two  types are different weight. Each time we compare only two coins have the same weight or not. In this case, assume $a$, $b$ are known. We want to study the smallest number of comparison that we can guarantee to solve these Problems: \\
+  \begin{enumerate}
+\item find a fake coin 
+\item find a real coin 
+\item comparison two coins on the balance and one of it is fake and the other is real  \\
+  \end{enumerate}
 
-1. a fake coin
 
-2. a real coin
+We discuss the Problem 3 first, it can transfer to a new circumstance:  there is an engine broken because of burned wire, and we need to find a pair of new electric wires to fix it, but all the wire are mass up, we only know that we have $a$ positive wires and $b$ negative wires in the beginning, each time we can choose two of them to connect to the engine and check if they are the same Electrical polarity (not work) or not (work). The object is minimize the worst case of testing times that we can fix the engine.  \\
 
-3. a fake coin and a real coin(need to know which one is real)
+To solve this problem, our inisight start from an equivalent graph problem, and give a definition of foolproof schemes in Section 2. In Section 3, we show the connection between foolproof schemes and  integer partition. In Section 4, we design an algorithm to solve the exact comparison times by using integer partition technique, and also speed up by cycle property. Finally, we solving the remainning Problem 1 and Problem 2 in Section 5.  
 
-4. a fake coin and a real coin(don't need to know which one is real)
 
-Note that the solution to Problem 3 could solve Problem 4,(solution for Problem 4)+(comparison of this pair) could solve Problem 3. That is, $ans(Problem 4) \leq ans(Problem 3)\leq ans(Problem 4)+1$
 
-We shall discuss Problem 4 first, then solve Problem 1,2,3 similarly.
 
-Problem 4 can transfer to a new circumstances: 
-there is an engine broken because of burned wire, and we need to find a pair of new electric wires to fix it, but all the wire are mass up, we only know that we have $\pa$ positive wires and $\pb$ negative wires in the beginning, each time we can choose 2 of them to connect to the engine and check if they are the same Electrical polarity (not work) or not (work). The object is minimize the worst case of testing times that we can fix the engine.
