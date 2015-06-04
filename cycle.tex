@@ -1,18 +1,54 @@
 \section{Computing $\tau(\pa,\pb)$}
+To find optimal, we enumerate all partitions of $\pa+\pb$.
+Then checking P's avoidence, we solve this as below. This idea is same as solving discrete knapsack problem by DP. This checking runs in $O(\pa\pb)$ for a particular partition.
 
+\begin{algorithm}
+\caption{Find optimal foolproof scheme}\label{alg:stupid}
 \begin{algorithmic}
-  \STATE{$R= \{\pa+\pb\}$}
-  \FOR{\textbf{each} partition $P$ of the number $\pa+\pb$ which avoids $\pa$}
-    \IF{$|P|>|R|$} \STATE{$R=P$}
-    \ENDIF
-  \ENDFOR
-  \STATE{output $R$}
+  \Procedure{Find\_optimal\_foolproof\_scheme}{$\pa,\pb$}\Comment{return a OFS}
+    \State{$R= \{\pa+\pb\}$}
+    \For{\textbf{each} partition $P$ of the number $\pa+\pb$ which avoids $\pa$}
+      \If{Check\_avoidence($P,\pa$)} \State \bf continue \EndIf
+      \If{$|P|>|R|$} \State{$R=P$}
+      \EndIf
+    \EndFor
+    \State{\textbf{return} $R$}
+  \EndProcedure
+  \end{algorithmic}
+\begin{algorithmic}
+  \Procedure{Check\_avoidence}{$P,\pa$}\Comment{Whether $P$ avoids $\pa$}
+    \State $S= \{0\}$
+    \For{\textbf{each} number $pi\in P$}\Comment{$O(\pa+\pb) times$}
+      \State $S=S\cup S\text{\d{+}}pi$\Comment{This cost $O(\pa)$}
+    \EndFor
+    \State \textbf{return} $a\not\in S$
+  \EndProcedure
 \end{algorithmic}
-check P's avoidence by Dynamic-Programming as solving discrete knapsack problem, keep avoidence vector when enumerating.
+\end{algorithm}
 
-Denote the number of partitions of $n$ as $p(n)$
+Denote the number of partitions of $n$ as $p(n)$, the number of partitions avoids $a$ of $n$ as $p_{aoivds\ a}(n)$
 
-Denote the number of partitions avoids $a$ of $n$ as $p_{aoivds\ a}(n)$
+Time Complexity: 
+
+\[
+O(\pa\pb\times p(\pa+\pb))\\
+=O(\pa\pb\frac{exp(\sqrt{\frac{2(\pa+\pb))}{3} } )}{\pa+\pb})
+\]
+
+We can improve this a little by enumerating only partitions which avoids $\pa$.
+\begin{algorithm}
+\caption{Find optimal foolproof scheme}\label{alg:naive}
+\begin{algorithmic}
+  \Procedure{Find\_optimal\_foolproof\_scheme}{$\pa,\pb$}\Comment{return a OFS}
+    \State{$R= \{\pa+\pb\}$}
+    \For{\textbf{each} partition $P$ of the number $\pa+\pb$ which avoids $\pa$}
+      \If{$|P|>|R|$} \State{$R=P$}
+      \EndIf
+    \EndFor
+    \State{output $R$}
+  \EndProcedure
+  \end{algorithmic}
+\end{algorithm}
 
 Time Complexity: 
 
@@ -21,7 +57,9 @@ O(a\times p_{aoivds\ \pa}(\pa+\pb))\\
 \leq O(\pa\times p(\pa+\pb))\\
 \leq O(\pa\frac{exp(\sqrt{\frac{2(\pa+\pb))}{3} } )}{\pa+\pb})
 \]
-
+\begin{remark}
+We shall enumerate partitions by Depth-First Search, keep avoidence set($S$) when enumerating.
+\end{remark}
 \pagebreak
 \subsection{Results}
 \input{rhotauTable.tex}
@@ -47,15 +85,20 @@ $\rho(a,b)$ has lower-bound $\ceil{\frac{b}{d}}$
 
 \begin{proof}
 To proof a lower-bound, we show a case whose number of partitions=$\ceil{\frac{b}{d}}$
+The scheme is trivial, divide $a+b$ into $\ceil{\frac{b}{d}}-1$ instances of $d$ and a $a+b-d\ceil{\frac{b}{d}}-1$ (denoted by $s$)
 
-The case is trivial, divide $a+b$ into $\ceil{\frac{b}{d}}-1$ instances of $d$ and a $a+b-d\ceil{\frac{b}{d}}-1$ (denoted by $s$)
-
-Prove the case avoids $\pa$ by contradiction
-
-If the subset contains $s$ since $s>a$ $\implies$ contradiction
-
-If the subset doesn't contains $s$, it contains only several $d$, but since $d\not| a$ $\implies$ contradiction
+Then we shall prove the scheme avoids $\pa$ by contradiction.There are two cases.
+If the subset contains $s$ but $s>a$.
+If the subset doesn't contains $s$, it contains only several '$d$'s, but $d\not| a$.
+Both cases raise contradiction.
 \end{proof}
+We shall setup notations before showing the folloing lemmas.  For a multiset $S$, 
+We denote the number of $i$ in $S$ as $X_i$, that is, we have $X_i$ '$i$'(s) in $S$ and $X = \sum_i{X_i}$.
+$S_k$ to denote the first $k$ elements(e.g. prefix) of $S$. $S_0$ is the empty set.
+
+To avoid ambiguity with union operation, we use $S$\d{+} a number $q$ to denote the result multiset that adding $q$ to each element to multiset $S$.
+
+We define set $U(S)$ for a multiset $s$ as subset-sums$\leq a$ of $S$. For example, $\pa=5$, $U({1,3,3})=\text{ignore}_{>5}(\{ 0,1,3,4,6,7\})=\{ 0,1,3,4\}$. Note that for any $S$, $U(S)$ always include zero.
 
 \begin{lemma}
 If a multiset $S$ avoids $a$ and composed only by factors of $a$, $|S|<a$
@@ -65,32 +108,27 @@ If a multiset $S$ avoids $a$ and composed only by factors of $a$, $|S|<a$
 
 We shall prove this by contradiction
 
-We denote the number of $i$ in $S$ as $X_i$, that is, we have $X_i$ '$i$'(s) in $S$
+We divide the proof into two parts.
 
-, the first $k$ elements of $S$ as $S_k$. $S_0$ is the empty set.
+{\bf(First Part)} 
+\begin{equation}\label{inceq}
+\forall k, |U(S_{k+1})|>|U(S_k)|
+\end{equation}
 
-We define set $U(s)$ for a multiset $s$ as subset-sums$\leq a$ of $s$. For example, $\pa=5$, $U({1,3,3})=ignore_{>5}(\{ 0,1,3,4,6,7\})=\{ 0,1,3,4\}$
+For simplisty we Denote $U(S_{k+1})$ as $u'$ and $U(S_k)$ as $u$, the k+1th element of $S$ as $w$.
+Note that since $\text{ignore}_{>\pa}(u\text{\d{+}}w)\subseteq u'$
+\begin{equation}\label{upro}
+\forall i\geq w, i \in u\implies i+w\in u'
+\end{equation}
 
-% \begin{remark}
-Note that for any $s$, $U(s)$ always include zero.
-% \end{remark}
+We shall prove the statement \ref{inceq} by contradiction, if $|u'|=|u|$ for some $k$, then since $u\subseteq u'$, $u=u'$. And from statement \ref{upro}, we get
+\[
+\forall i\geq w, i \in u\implies i+w\in u'\implies i+w\in u
+\]
+Since U always include 0, and $0\in u \implies tw\in u$ for any $t$.
+But $w$ is a factor of $\pa$, thus $\pa\in u$, contradicts $S$ avoids $\pa$
 
-We divide the proof into two sections.
-
-1. $\forall k, |U(P_{k+1})|>|U(P_k)| $ 
-
-Denote $U(P_{k+1})$ as $u'$ and $U(P_k)$ as $u$.
-
-Prove this by contradiction, if $|u'|=|u|$ for some $k$, let $w$ is the k+1th element of $S$,then 
-Since $u\subseteq u'$, $u=u'$
-
-$\forall i\geq w, i \in u \implies i+w\in u' \implies i+w\in u$
-
-Since U always include 0, $0\in u \implies tw\in u \forall t$
-
-$w$ is a factor of $\pa$, thus $w\in u$, contradicts $S$ avoids $\pa$
-
-2. We discover $U(S_0)$ to $U(S_{|S|})$, since $U(S_0)=\{0\}$, each time
+{\bf(Second Part)} We discover $U(S_0)$ to $U(S_{|S|})$, since $U(S_0)=\{0\}$, each time
 $U$ at least a new element. If $|S|\geq \pa$, then $U(S)$
 must be $\{0,1,...,\pa\}$, contradicts $S$ avoids $\pa$
 
@@ -102,25 +140,24 @@ $\forall \pb>d(d+1)(\pa-1)  + (\pa - (\pa\mod d)$, an optimal partition contains
 \end{theorem}
 
 \begin{proof} 
-    Let $S$ is a partition of $\pa+\pb$ avoids $\pa$,   $X_i$ is the number of times $i$ appears in $S$  and  $X = \sum_i{X_i}$  \\  
+  We shall prove by contradiction.
+  Let $S$ is a partition of $\pa+\pb$ avoids $\pa$.
 
-    Assume $X_d<\lfloor{\frac{\pa}{d}} \rfloor $, \\
+  Assume $X_d<\lfloor{\frac{\pa}{d}} \rfloor $ then 
+  \[
+  X=\sum_{i<d}{X_i}+X_d+\sum_{i>d}{X_i}
+  \]
+  Since $\sum_i{iX_i}=\pa+\pb$, to maximize $X$, we use as much small number as possible. Hence
 
-    Then 
-    \[
-    X=\sum_{i<d}{X_i}+X_d+\sum_{i>d}{X_i}
-    \]
-    Since $\sum_i{X_i\times i}=\pa+\pb$, to maximize $X$, we use as much small number as possible. Hence
-
-    \begin{align*}
-    X&\leq \pa-1+ \floor{\frac{\pa}{d}}   +\floor{{\frac{\pb-(\pa - (\pa\mod d))}{d+1}}}\\
-     &\leq \pa-1+ \frac{\pa}{d}   +{\frac{\pb-(\pa - (\pa\mod d))}{d+1}}
-    \end{align*}
-    
-    $\forall \pb>d(d+1)(\pa-1) + (\pa - (\pa\mod d)), \\
-    X<\pa+\floor{\frac{\pa}{d}} + \pa d -d \leq \ceil{\frac{\pb}{d}}$.    contradicts lemma 4.1
-
-    Hence  S is not optimal
+  \begin{align*}
+  X&\leq \pa-1+ \floor{\frac{\pa}{d}}   +\floor{{\frac{\pb-(\pa - (\pa\mod d))}{d+1}}}\\
+   &\leq \pa-1+ \frac{\pa}{d}   +{\frac{\pb-(\pa - (\pa\mod d))}{d+1}}
+  \end{align*}
+  
+  $\forall \pb>d(d+1)(\pa-1) + (\pa - (\pa\mod d)), $
+  \[X<\pa+\floor{\frac{\pa}{d}} + \pa d -d \leq \ceil{\frac{\pb}{d}}
+  \]
+  which is not optimal from lemma \ref{upper bound}.A contradiction occurs.
 \end{proof}
 
 \begin{theorem}
@@ -128,31 +165,23 @@ $\forall \pb>d(d+1)(\pa-1)  + (\pa - (\pa\mod d)$, an optimal partition contains
 \end{theorem}
 
 \begin{proof}
-    $S$ is a optimal partition of a+b avoids $a$ ($b>d(d+1)(a-1)  + (a - (a\mod d)$)
-    
-    $S'=S+$'d' is a partition of a+b+d 
+    $b>d(d+1)(a-1)  + (a - (a\mod d)$,
+    let $S$ be a optimal partition of a+b avoids $a$, $S'=S+$'d' which is a partition of a+b+d.
 
     We divide the proof into avoidance part and optimal part
 
     {\bf(Avoidance)}
-    Prove this by contradiction
+    prove by contradiction
 
     If $S'$ has subset-sum $\pa$, $S$ must has subset-sum $\pa$ or $\pa-d$. The former is not possible from definition. 
-
-    If the later happens, $S$ has subset-sum $\pa$ since it has at least $\floor{{\frac{a}{d}}}$ instances of 'd', and $\pa-d$ couldn't has all of them.
-    Also contradict definition.
-
-    $S'$ avoids $\pa$.
+    If the later happens, $S$ has subset-sum $\pa$ since it has at least $\floor{{\frac{a}{d}}}$ instances of 'd', and $\pa-d$ couldn't has all of them. This contradicts definition.
+    Thus, $S'$ avoids $\pa$.
 
     {\bf(Optimal)}
         prove by contradiction
 
-        If $S'$ is not optimal there exist an optimal partition $P'$ that $|P'|>|S'|$ and has no subset-sum=$a$
-
-        $P'$ has at least one $d$, let $P=P'-d(sum(P)=sum(S))$ then $P$ has no subset-sum=$a$ and $|P|=|P'|-1>|S'|-1=|S|$, which contradicts $S$ is optimal.
-
-        $S'$ is optimal.
-
+        If $S'$ is not optimal there exist an optimal partition $P'$ that $|P'|>|S'|$ and has no subset-sum=$a$. $P'$ has at least one $d$, let $P=P'-d$(note $sum(P)=sum(S)$) then $P$ has no subset-sum=$a$ and $|P|=|P'|-1>|S'|-1=|S|$, which contradicts $S$ is optimal. Thus, $S'$ is optimal.
+\\
     Thus the theorem holds.
 \end{proof}
 
@@ -162,23 +191,19 @@ for a constant $\pa$, $\rho(\pa,\pb)$ forms cycle of length $d$ if $\pb$ is suff
 
 \subsection{Algorithm using cycle property}
 
-let $K=\pa+\pb-kd>d(d+1)a$ (choose maximal $k$, e.g. minimal $K$)
-
+\begin{algorithm}
+\caption{Find optimal foolproof scheme using cycle property}\label{alg:cycle}
 \begin{algorithmic}
-  \STATE{$R= \{\pa+\pb\}$}
-  \FOR{\textbf{each} partition $P$ of the number K which avoids $\pa$}
-    \IF{$|P|>|R|$} \STATE{$R=P$}
-    \ENDIF
-  \ENDFOR
-  \STATE{output $R$+k instances of 'd'}
+  \State $K=\pa+\pb-kd>d(d+1)a$ \Comment{choose maximal $k$, e.g. minimal $K$}
+  \Procedure{Find\_optimal\_foolproof\_scheme}{$\pa,\pb$}\Comment{return a OFS}
+    \State{$R=$Find\_optimal\_foolproof\_scheme$^2$($\pa,\pb-Kd$)}\Comment{This procedure is from algorithm \ref{alg:naive}}
+    \State{\textbf{return} $R$+k instances of 'd'}
+  \EndProcedure
 \end{algorithmic}
+\end{algorithm}
 check P's avoidence by Dynamic-Programming as solving discrete knapsack problem, keep avoidence vector when enumerating.
 
 Time Complexity:
-
-Denote the number of partitions of $n$ as $p(n)$
-
-Denote the number of partitions avoids $a$ of $n$ as $p_{aoivds\ a}(n)$
 
 \[
 O(k+a\times p_{aoivds\ \pa}(K))\\
