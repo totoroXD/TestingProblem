@@ -24,16 +24,16 @@ $\OIS^\pm= \text{removing an arbitrary edge}$. That is, $\tau^\pm(a,b)=\tau(a,b)
 \end{lemma}
 
 \begin{proof}
-We divide the proof of the equation into two inequations. For conciseness, we denote $\tau(a,b)-1$ by $\tau$ and the answer of this problem as $k_{min}$.
+We divide the proof of the equation into two inequations. For conciseness, we denote $\tau(a,b)-1$ by $\tau$ and the answer of this problem as $\tau^\pm$.
 
 For a optimal foolproof scheme $G$(with $\tau$ edges). Let $G'$ = ($G$ remove an arbitrary edge $e$), then through $F'$.
 If $G'$ has unbalance comparison, we conclude the one is unbalanced, otherwise we could conclude $e$ is unbalanced.
 Either case shows $G'$ is sufficient to infer a real-fake pair.
-\[k_{min} \leq \tau-1\]
+\[\tau^\pm \leq \tau-1\]
 
-If we could infer a pair $e$ is real-fake through the optimal scheme $F$(with $k_{min}$ comparisons).
+If we could infer a pair $e$ is real-fake through the optimal scheme $F$(with $\tau^\pm$ comparisons).
 Then the graph $F$ + $e$ is foolproof.
-\[\tau\leq k_{min}+1\]
+\[\tau\leq \tau^\pm+1\]
 
 From the above inequations, the lemma holds.
 
