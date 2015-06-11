@@ -1,213 +1,234 @@
-\section{Computing $\tau(\pa,\pb)$}
-To find optimal, we enumerate all partitions of $\pa+\pb$.
-Then checking P's avoidence, we solve this as below. This idea is same as solving discrete knapsack problem by DP. This checking runs in $O(\pa\pb)$ for a particular partition.
+%!TEX root = total.tex
+
+\section{Finding Optimal Foolproof Scheme}
+Based on Corollary~\ref{cor:maximize-|P|} in the previous section, we can find an optimal foolproof scheme 
+by enumerating all possible partitions of $\pa+\pb$, and selecting among those that avoids $\pa$ the one 
+that consists of the most number of parts.  This approach is equivalent to solving the NP-complete 
+{\sc Subset Sum} problem~\cite{GarJoh79} for each possible partition of $\pa+\pb$, 
+which can be done via dynamic programming~\cite{CLRS09} as shown in Algorithm~\ref{algo:naive}:
 
 \begin{algorithm}
-\caption{Find optimal foolproof scheme}\label{alg:stupid}
+\caption{Find Optimal Foolproof Scheme (OFS)}
+\label{algo:naive}
 \begin{algorithmic}
-  \Procedure{Find\_optimal\_foolproof\_scheme}{$\pa,\pb$}\Comment{return a OFS}
-    \State{$R= \{\pa+\pb\}$}
+  \Procedure{Find\_Optimal\_Foolproof\_Scheme}{$\pa,\pb$}\Comment{Return an OFS}
+    \State{Set default partition $R$ as $\{\pa+\pb\}$;}
     \For{\textbf{each} partition $P$ of the number $\pa+\pb$ which avoids $\pa$}
-      \If{Check\_avoidence($P,\pa$)} \State \bf continue \EndIf
-      \If{$|P|>|R|$} \State{$R=P$}
+      \If{Subset\_Sum($P,\pa$)} \State \bf continue
+      \ElsIf{$|P|>|R|$} \State{update $R$ as $P$;}
       \EndIf
     \EndFor
     \State{\textbf{return} $R$}
   \EndProcedure
   \end{algorithmic}
 \begin{algorithmic}
-  \Procedure{Check\_avoidence}{$P,\pa$}\Comment{Whether $P$ avoids $\pa$}
-    \State $S= \{0\}$
-    \For{\textbf{each} number $pi\in P$}\Comment{$O(\pa+\pb) times$}
-      \State $S=S\cup S\text{\d{+}}pi$\Comment{This cost $O(\pa)$}
+  \Procedure{Subset\_Sum}{$P,\pa$}\Comment{Check if a subset of $P$ sums up to $\pa$}
+    \State Set default multiset $S$ as $\{0\}$;
+    \For{\textbf{each} integer $\pi \in P$} 
+      \State{$S \leftarrow S \cup \{\pi + s \mid s \in S \mbox{\ and\ } \pi + s \leq \pa \}$;}
     \EndFor
-    \State \textbf{return} $a\not\in S$
+    \State \textbf{return} $a \in S$
   \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
-Denote the number of partitions of $n$ as $p(n)$, the number of partitions avoids $a$ of $n$ as $p_{aoivds\ a}(n)$
+Let $p(n)$ denote the number of different partitions of $n$, 
+which asymptotically approaches $\smash{\mathrm{exp}(\pi\sqrt{2n/3})/(4n\sqrt{3})}$ 
+as $n \rightarrow \infty$~\cite{HarRam18}.   
+The running time of the procedure Subset\_Sum$(P,\pa)$
+is $|P| \times O(\pa)$, which is bounded by $O((\pa + \pb)\pa)$.  Thus, by Algorithm~\ref{algo:naive}, 
+we can find an optimal foolproof scheme, as well as compute the value of $\tau(\pa,\pb)$, in 
+$$p(\pa+\pb) \times O((\pa+\pb)\pa) = O\left(\pa \ e^{\pi\sqrt{2(\pa+\pb)/3}}\right) \mbox{\ time.}$$  
+\ref{sec:results} shows a table of $\tau(\pa,\pb)$ for $1 \leq \pa, \pb \leq 15$.
 
-Time Complexity: 
+\medskip
 
-\[
-O(\pa\pb\times p(\pa+\pb))\\
-=O(\pa\pb\frac{exp(\sqrt{\frac{2(\pa+\pb))}{3} } )}{\pa+\pb})
-\]
+\noindent
+{\it Remark.} If we enumerate the partitions by depth-first search (according to lexicographical order), 
+                      consecutive partitions during the enumeration will generally be similar, so that 
+                      the time for Subset\_Sum$(P,\pa)$ for each partition requires amortized $O(\pa)$ time.
+                     Consequently, this allows us to reduce the time complexity further by a factor of $O(\pa+\pb)$.
+                     Nevertheless, this is not the main focus of the work, so that we omit the details for brevity.
 
-We can improve this a little by enumerating only partitions which avoids $\pa$.
-\begin{algorithm}
-\caption{Find optimal foolproof scheme}\label{alg:naive}
-\begin{algorithmic}
-  \Procedure{Find\_optimal\_foolproof\_scheme}{$\pa,\pb$}\Comment{return a OFS}
-    \State{$R= \{\pa+\pb\}$}
-    \For{\textbf{each} partition $P$ of the number $\pa+\pb$ which avoids $\pa$}
-      \If{$|P|>|R|$} \State{$R=P$}
-      \EndIf
-    \EndFor
-    \State{output $R$}
-  \EndProcedure
-  \end{algorithmic}
-\end{algorithm}
+\subsection{Cyclic Property of $\tau(\pa,\pb)$}
+In this subsection, we shall show that for any $\pa$, 
+there is some property that an optimal foolproof scheme must possess when $\pb$ is sufficiently large.
+Consequently, this allows us to show a cyclic property about $\tau(\pa,\pb)$, 
+as well as speed up the construction time of an optimal foolproof scheme. 
 
-Time Complexity: 
+\medskip
 
-\[
-O(a\times p_{aoivds\ \pa}(\pa+\pb))\\
-\leq O(\pa\times p(\pa+\pb))\\
-\leq O(\pa\frac{exp(\sqrt{\frac{2(\pa+\pb))}{3} } )}{\pa+\pb})
-\]
-\begin{remark}
-We shall enumerate partitions by Depth-First Search, keep avoidence set($S$) when enumerating.
-\end{remark}
-\pagebreak
-\subsection{Results}
-\input{rhotauTable.tex}
-\pagebreak
+\noindent
+Before delving into details, let us take a look about the values $\tau(2,\pb)$ and $\tau(5,\pb)$ for different $\pb$s.
 
-Previously, to find OTS, we enumerate all partitions of $\pa+\pb$. It cost much time. Discovering from tables in Results 3.3. We found the cycle property. Take $\pa=5$ as example.
-\begin{tabular}{l|rrrrrrrrrrrrrrrrrrrr}
- $\tau(\pa,\pb)$ &  1 &  2 &  3 &  4 &  5 &  6 &  7 &  8 &  9 & 10 & 11 & 12 & 13 & 14 & 15 & 16 & 17 & 18 & 19 & 20 \\
+\medskip
+
+\begin{tabular}{c|rrrrrrrrrrrrrrr}
+$\pb$ &  1 &  2 &  3 &  4 &  5 &  6 &  7 &  8 &  9 & 10 & 11 & 12 & 13 & 14 & 15  \\
 \hline
- 5        &  3 &  4 &  4 &  5 &  5 &  6 &  6 &  8 &  7 & 10 &  8 & 11 &  9 & 12 & 10 & 13 & 11 & 14 & 12 & 15 \\
+$\tau(2,\pb)$  &  2 &  2 &  3 &  4 &  4 &  5 &  6 &  6 &  7 &  8 &  8 &  9 & 10 & 10 & 11 \\
+$\tau(5,\pb)$        &  3 &  4 &  4 &  5 &  5 &  6 &  6 &  8 &  7 & 10 &  8 & 11 &  9 & 12 & 10  \\
 \hline
 \end{tabular}
 
-From $\pb\geq 9$, $\tau(\pa,\pb)$ forms cycle of length $2$. In general, when $\pb$ is large enough $\tau(\pa,\pb)$ would forms into cycles.
-Using this property to improve our algorithm for the case $\pb$ is much larger than $\pa$. The improved algorithm runs in time complexity with no $\pb$.
+\medskip
 
-\begin{definition}
-$d$ is the smallest non-factor of $\pa$
-\end{definition}
-\begin{lemma}
-$\rho(a,b)$ has lower-bound $\ceil{\frac{b}{d}}$
+\noindent
+From $\pb\geq 1$, $\tau(2,\pb)$ forms cycle of length $3$, such that $\tau(2,\pb+3) = \tau(2,\pb) + 2$.
+Similarly, from $\pb\geq 9$, $\tau(5,\pb)$ forms cycle of length $2$, such that $\tau(5,\pb+2) = \tau(5,\pb) + 1$.
+In fact, for any fixed $\pa$, such kind of cycles must eventually occur.  
+To see why this is true, we shall now examine more closely about the structure of an optimal foolproof scheme.  
+
+\medskip
+
+\noindent
+Let $\ell(n)$ denote the least non-factor of $n$, which is the smallest positive integer that does not divide $n$ properly.
+For instance, $\ell(1) = 2$, $\ell(2) = 3$, $\ell(3) = 2$, $\ell(4) = 3$, $\ell(5) = 2$, and $\ell(6) = 4$.  
+To simplify our discussion, we shall now assume $\pa \leq \pb$ throughout this subsection, and use $\pl$ to denote $\ell(\pa)$.
+Also, we call a partition $P$ of $n$ a \emph{maximal} partition that avoids $x$, if among all partitions of $n$ 
+which avoid $x$, $P$ is one that contains the maximum number of parts;  furthermore, we use $\rho(x, n)$ to denote its number of parts.
+The following two lemmas give some basic properties about a partition that avoids $\pa$.
+
+\begin{lemma} \label{lem:at-least-b/L}
+Let $P$ be a maximal partition of $\pa + \pb$ that avoids $\pa$.  
+Then, $|P| = \rho(\pa, \pa+\pb) \geq \myceil{\pb/\pl}$.
 \end{lemma} 
-
 \begin{proof}
-To proof a lower-bound, we show a case whose number of partitions=$\ceil{\frac{b}{d}}$
-The scheme is trivial, divide $a+b$ into $\ceil{\frac{b}{d}}-1$ instances of $d$ and a $a+b-d\ceil{\frac{b}{d}}-1$ (denoted by $s$)
-
-Then we shall prove the scheme avoids $\pa$ by contradiction.There are two cases.
-If the subset contains $s$ but $s>a$.
-If the subset doesn't contains $s$, it contains only several '$d$'s, but $d\not| a$.
-Both cases raise contradiction.
+Consider a partition of $\pa+\pb$ with $\myceil{\pb/\pl}-1$ instances of $\pl$ and a remainder part $r = \pa+\pb-\pl(\myceil{\pb/\pl}-1)$.  
+For any subset $P'$ of this partition, either $P'$ contains $r$, or $P'$ contains purely copies of $\pl$.  
+In the former case, the subset sum of $P'$ cannot be $\pa$, since $r > \pa$. 
+In the latter case, the subset sum of $P'$ cannot be $\pa$, since $\pl$ does not divide $\pa$.
+Thus, the above partition avoids $\pa$, and contains $\myceil{\pb/\pl}$ parts.   
+This completes the proof of the lemma.
+\qed
 \end{proof}
-We shall setup notations before showing the folloing lemmas.  For a multiset $S$, 
-We denote the number of $i$ in $S$ as $X_i$, that is, we have $X_i$ '$i$'(s) in $S$ and $X = \sum_i{X_i}$.
-$S_k$ to denote the first $k$ elements(e.g. prefix) of $S$. $S_0$ is the empty set.
 
-To avoid ambiguity with union operation, we use $S$\d{+} a number $q$ to denote the result multiset that adding $q$ to each element to multiset $S$.
-
-We define set $U(S)$ for a multiset $s$ as subset-sums$\leq a$ of $S$. For example, $\pa=5$, $U({1,3,3})=\text{ignore}_{>5}(\{ 0,1,3,4,6,7\})=\{ 0,1,3,4\}$. Note that for any $S$, $U(S)$ always include zero.
-
-\begin{lemma}
-If a multiset $S$ avoids $a$ and composed only by factors of $a$, $|S|<a$
+\begin{lemma} \label{lem:at-most-a-1}
+If a partition $P$ avoids $\pa$, $P$ contains less than $\pa$ integers that is a factor of $\pa$;  
+in other words, $| \{ \pi \mid \pi \in P \mbox{\ and\ } \pi < \pl \}|  < \pa$. 
 \end{lemma}
-
 \begin{proof}
+Let $P = \{ \pi_1, \pi_2, \ldots \}$ with $\pi_i \leq \pi_j$ when $i < j$.  
+Moreover, let $k$ be the number of integers in $P$ that is a factor of $\pa$
+(i.e., $k$ is the largest index such that $\pi_k < \pl$).   
 
-We shall prove this by contradiction
+\medskip
 
-We divide the proof into two parts.
+\noindent
+Let $S_i$ denote the set of integers in $[1,\pa]$ that can be written as a sum from a subset of
+integers in $P_i = \{ \pi_1, \pi_2, \ldots, \pi_i \}$.   Thus, if $\pi_1 < \pl$,
+we have $S_1 = \{ \pi_1 \}$, and $|S_1| = 1$.
+We claim that $|S_i| < |S_{i+1}|$ for any $i \in [1,k-1]$, so that $|S_k| \geq k$.  
+Furthermore, since $P$ avoids $\pa$, we must have $|S_k| < \pa$, so that we obtain
+the desired relationship that $k < \pa$.
 
-{\bf(First Part)} 
-\begin{equation}\label{inceq}
-\forall k, |U(S_{k+1})|>|U(S_k)|
-\end{equation}
+\medskip
 
-For simplisty we Denote $U(S_{k+1})$ as $u'$ and $U(S_k)$ as $u$, the k+1th element of $S$ as $w$.
-Note that since $\text{ignore}_{>\pa}(u\text{\d{+}}w)\subseteq u'$
-\begin{equation}\label{upro}
-\forall i\geq w, i \in u\implies i+w\in u'
-\end{equation}
-
-We shall prove the statement \ref{inceq} by contradiction, if $|u'|=|u|$ for some $k$, then since $u\subseteq u'$, $u=u'$. And from statement \ref{upro}, we get
-\[
-\forall i\geq w, i \in u\implies i+w\in u'\implies i+w\in u
-\]
-Since U always include 0, and $0\in u \implies tw\in u$ for any $t$.
-But $w$ is a factor of $\pa$, thus $\pa\in u$, contradicts $S$ avoids $\pa$
-
-{\bf(Second Part)} We discover $U(S_0)$ to $U(S_{|S|})$, since $U(S_0)=\{0\}$, each time
-$U$ at least a new element. If $|S|\geq \pa$, then $U(S)$
-must be $\{0,1,...,\pa\}$, contradicts $S$ avoids $\pa$
-
-
+\noindent
+It remains to prove the claim.  Suppose on the contrary that $|S_i| = |S_{i+1}|$ for some $i \in [1,k-1]$.  
+This implies that $\pi_{i+1} \in S_i$, or else $S_{i+1}$ contains at least one more integer than $S_i$.
+As $\pi_{i+1} \in S_i$, we must now have $2\cdot \pi_{i+1} \in S_i$ for the same reason.
+Inductively, for each $t \geq 1$ such that $t\cdot \pi_{i+1} \leq \pa$, we must have $t\cdot \pi_{i+1} \in S_i$.
+Since $\pi_{i+1}$ is a factor of $\pa$, this implies that $\pa \in S_i$.  In other words, $\pa$
+can be written as a sum of a subset of integers in $P_i \subseteq P$; this contradicts with the fact that
+$P$ avoids $\pa$.  Thus, the claim (and the lemma) follows.
+\qed
 \end{proof}
 
-\begin{theorem} 
-$\forall \pb>d(d+1)(\pa-1)  + (\pa - (\pa\mod d)$, an optimal partition contains at least $\floor{{\frac{\pa}{d}}}$ instances of $d$
-\end{theorem}
+Based on the above lemmas, we are ready to establish 
+the key lemma and the main theorem of this subsection as follows.
 
+\begin{lemma}  \label{lem:key-lemma}
+Let $P$ be a maximal partition of $\pa + \pb$ that avoids $\pa$.
+If $\pb > \pl\left((\pl+1)(\pa - 1) + \myceil{\pa/\pl}\right)$,
+$P$ must contain at least $\myceil{\pa/\pl} = \myfloor{\pa/\pl} + 1$ instances of $\pl$.
+\end{lemma}
 \begin{proof} 
-  We shall prove by contradiction.
-  Let $S$ is a partition of $\pa+\pb$ avoids $\pa$.
-
-  Assume $X_d<\lfloor{\frac{\pa}{d}} \rfloor $ then 
-  \[
-  X=\sum_{i<d}{X_i}+X_d+\sum_{i>d}{X_i}
-  \]
-  Since $\sum_i{iX_i}=\pa+\pb$, to maximize $X$, we use as much small number as possible. Hence
-
-  \begin{align*}
-  X&\leq \pa-1+ \floor{\frac{\pa}{d}}   +\floor{{\frac{\pb-(\pa - (\pa\mod d))}{d+1}}}\\
-   &\leq \pa-1+ \frac{\pa}{d}   +{\frac{\pb-(\pa - (\pa\mod d))}{d+1}}
-  \end{align*}
-  
-  $\forall \pb>d(d+1)(\pa-1) + (\pa - (\pa\mod d)), $
-  \[X<\pa+\floor{\frac{\pa}{d}} + \pa d -d \leq \ceil{\frac{\pb}{d}}
-  \]
-  which is not optimal from lemma \ref{upper bound}.A contradiction occurs.
+We shall prove this by contradiction.  Let us fix a maximal partition~$P$, and use $X_i$ to denote
+the number of instances of $i$ contained in $P$.  
+Assume on the contrary that $X_\pl \leq \myfloor{\pa/\pl}$.  Then, we have
+\[
+  |P| = \sum_{1\leq i < \pl}{X_i} + X_\pl +\sum_{i \geq \pl+1}{X_i}.
+\]
+Since $\sum_i {i \cdot X_i} = \pa+\pb$, under the conditions that  
+$\sum_{1\leq i < \pl}{X_i} \leq \pa-1$ by Lemma~\ref{lem:at-most-a-1} and 
+$X_\pl \leq \myfloor{\pa/\pl}$ by the assumption, we get
+\begin{eqnarray*}
+  |P|\ &\leq& \  
+       \pa - 1 + \myfloor{\frac{\pa}{\pl}}   +  \frac{(\pa + \pb) - 1 \cdot (\pa-1) - \pl \cdot (\myfloor{\pa/\pl})}{\pl+1}\\
+       &=& \  \pa - 1 + \frac{\pb  + 1 + \myfloor{\pa/\pl}}{\pl+1}\ \ =\ \ \pa - 1 + \frac{\pb + \myceil{\pa/\pl}}{\pl+1}.
+\end{eqnarray*}  
+By Lemma~\ref{lem:at-least-b/L}, we have $|P| \geq \myceil{\pb/\pl} \geq \pb/\pl$, so that
+\[
+  \frac{\pb}{\pl}\ \ \leq\ \ \pa - 1 + \frac{\pb + \myceil{\pa/\pl}}{\pl+1}.
+\]
+Multiplying both sides by $\pl(\pl+1)$, we obtain
+\[
+  \pb(\pl+1)\ \ \leq\ \ \pl(\pl+1)(\pa - 1) + \pb\pl + \pl\myceil{\pa/\pl}.
+\]
+This contradicts with the condition that $\pb > \pl \left((\pl+1)(\pa-1) + \myceil{\pa/\pl}\right)$, 
+and the lemma thus follows.
+\qed
 \end{proof}
 
-\begin{theorem}
-	$\forall \pb>d(d+1)(\pa-1)  + (\pa - (\pa\mod d)$, $\rho(\pa,\pb+d)=\rho(\pa,\pb)+1$
+\begin{theorem} \label{thm:OFS-of-P+L}
+Let $P$ be a maximal partition of $\pa + \pb$ that avoids $\pa$.
+If $\pb > \pl\left((\pl+1)(\pa - 1) + \myceil{\pa/\pl}\right)$, then
+$P' = P \cup \{ \pl \}$ must be a maximal partition of $\pa + \pb + \pl$ that avoids $\pa$.
 \end{theorem}
-
 \begin{proof}
-    $b>d(d+1)(a-1)  + (a - (a\mod d)$,
-    let $S$ be a optimal partition of a+b avoids $a$, $S'=S+$'d' which is a partition of a+b+d.
+We first show that $P'$ avoids $\pa$, and then further show that $P'$ is a maximal partition.
+Both facts together will complete the proof.
 
-    We divide the proof into avoidance part and optimal part
+\medskip
 
-    {\bf(Avoidance)}
-    prove by contradiction
+\noindent
+{\bf $P'$ avoids $\pa$:}  Suppose on the contrary that some subset of $P'$ adds up to $\pa$.  This happens only if some subset of $P$
+adds up to $\pa$ or $\pa - \pl$.  The former case cannot occur since $P$ avoids $\pa$.  For the latter case, let $S$ be a subset of $P$ 
+whose sum is exactly $\pa - \pl$.  Then, $S$ contains at most $\myceil{\pa/\pl} - 1$ instances of $\pl$ (otherwise the sum exceeds $\pa - \pl$);  
+however, by Lemma~\ref{lem:key-lemma}, $P$ contains at least $\myceil{\pa/\pl}$ copies of $\pl$, so that $\pl \in P\backslash S$.
+Consequently, $S \cup \{\pl\} \subseteq P$, whose sum is exactly $\pa$.  This contradicts with the assumption that $P$ avoids $\pa$.
 
-    If $S'$ has subset-sum $\pa$, $S$ must has subset-sum $\pa$ or $\pa-d$. The former is not possible from definition. 
-    If the later happens, $S$ has subset-sum $\pa$ since it has at least $\floor{{\frac{a}{d}}}$ instances of 'd', and $\pa-d$ couldn't has all of them. This contradicts definition.
-    Thus, $S'$ avoids $\pa$.
+\medskip
 
-    {\bf(Optimal)}
-        prove by contradiction
-
-        If $S'$ is not optimal there exist an optimal partition $P'$ that $|P'|>|S'|$ and has no subset-sum=$a$. $P'$ has at least one $d$, let $P=P'-d$(note $sum(P)=sum(S)$) then $P$ has no subset-sum=$a$ and $|P|=|P'|-1>|S'|-1=|S|$, which contradicts $S$ is optimal. Thus, $S'$ is optimal.
-\\
-    Thus the theorem holds.
+\noindent
+{\bf $P'$ is maximal:}  Suppose on the contrary that there exists some partition $S'$ of $\pa+\pb+\pl$ that avoids $\pa$, and with $|S'| > |P'|$.
+By Lemma~\ref{lem:key-lemma}, $S'$ contains at least one instance of $\pl$.  Removing one instance of $\pl$ from $S'$ would give a 
+partition $S$ of $\pa + \pb$ that avoids $\pa$, and with $|S| = |S'| - 1 > |P'| - 1 = |P|$.  This contradicts with the maximality of $P$.
+\qed
 \end{proof}
+
+The above theorem, together with Corollary~\ref{cor:maximize-|P|}, immediately leads to the following corollary:
 
 \begin{corollary}
-for a constant $\pa$, $\rho(\pa,\pb)$ forms cycle of length $d$ if $\pb$ is sufficiently large
+For sufficiently large $\pb$,  
+\begin{eqnarray*}
+  \rho(\pa, \pa + \pb + \pl) &=& \rho(\pa + \pb) + 1 \\
+  \tau(\pa,\pb+\pl)             &=& \tau(\pa,\pb) + \pl - 1.
+\end{eqnarray*}
 \end{corollary}
 
-\subsection{Algorithm using cycle property}
+\subsection{Speed-Up in Finding Optimal Foolproof Scheme}
+Based on Theorem~\ref{thm:OFS-of-P+L}, we can find an optimal foolproof scheme in an alternative way, as shown in Algorithm~\ref{algo:faster}.  
+Basically, if $\pb$ is sufficiently large, we will first calculate a maximum $k$ such that $\pb - k\pl$ remains sufficiently large, 
+and construct a maximal partition $P$ of $\pa + \pb - k\pl$ that avoids $\pa$. 
+Then, we extend $P$ to a maximal partition $P'$ of $\pa + \pb$ by adding $k$ copies of $\pl$.  Else, we will simply run Algorithm~\ref{algo:naive}
+to obtain the answer.  Consequently, for any value of $\pb$, the running time of the algorithm is bounded by 
+$$p(\pa + \pl((\pl+1)(\pa-1) + \myceil{\pa/\pl})) \times O(\pa) \approx O\left(e^{\pi\pl\sqrt{2\pa/3}}\right),$$  
+which is independent of $\pb$.
 
 \begin{algorithm}
-\caption{Find optimal foolproof scheme using cycle property}\label{alg:cycle}
+\caption{A Faster Algorithm to Find Optimal Foolproof Scheme}\label{algo:faster}
 \begin{algorithmic}
-  \State $K=\pa+\pb-kd>d(d+1)a$ \Comment{choose maximal $k$, e.g. minimal $K$}
-  \Procedure{Find\_optimal\_foolproof\_scheme}{$\pa,\pb$}\Comment{return a OFS}
-    \State{$R=$Find\_optimal\_foolproof\_scheme$^2$($\pa,\pb-Kd$)}\Comment{This procedure is from algorithm \ref{alg:naive}}
-    \State{\textbf{return} $R$+k instances of 'd'}
+  \Procedure{Faster\_Optimal\_Foolproof\_Scheme}{$\pa,\pb$}\Comment{Return an OFS}
+    \If {$\pb > \pl((\pl+1)(\pa-1) + \myceil{\pa/\pl})$}\Comment{$\pl$ is the least non-factor of $\pa$}
+        \State {$k \leftarrow$ maximum integer such that $\pb - k\pl > \pl((\pl+1)(\pa-1) + \myceil{\pa/\pl})$;}
+        \State {$R\ \leftarrow\ $ Find\_Optimal\_Foolproof\_Scheme$(\pa,\pb - k\pl)$; }         
+        \State {\textbf{return} $R \cup \{ \pl, \ldots, \pl \}$; }\Comment{$\{ \pl, \ldots, \pl \}$ = $k$ copies of $\pl$}
+    \Else
+         \State {\textbf{return} Find\_Optimal\_Foolproof\_Scheme$(\pa,\pb)$;}
+    \EndIf
   \EndProcedure
 \end{algorithmic}
 \end{algorithm}
-check P's avoidence by Dynamic-Programming as solving discrete knapsack problem, keep avoidence vector when enumerating.
 
-Time Complexity:
-
-\[
-O(k+a\times p_{aoivds\ \pa}(K))\\
-= O(\pa\times p(K))\\
-= O(\pa\frac{exp(\sqrt{\frac{2(1+d(d+1)(\pa-1)+\pa)}{3} } )}{1+d(d+1)(\pa-1)+\pa})
-= O(\frac{exp(\sqrt{\frac{2(1+d(d+1)(\pa-1)+\pa)}{3} } )}{d^2})
-\]
