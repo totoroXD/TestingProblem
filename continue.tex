@@ -59,11 +59,9 @@ Find the smallest number of comparison that we can infer a coin is fake.\\
 
 }
 
-\begin{definition}
-If a scheme could infer a fake coin. We say this graph is a inferable$^-$ scheme for fake ($\IS^-$). Otherwise it's not inferable$^-$.
 
-Optimal inferable scheme for fake ($\OIS^-$) is $\IS^-$ with minimum number of comparison.
-Deonte the number of edges of $\OIS^-$ by $\tau^-(\pa,\pb)$.
+\begin{definition}
+Same as previous problem, we define $\IS^-$, $\OIS^-$ and $\tau^-(a,b)$.
 \end{definition}
 
 Note that $\OFS(a,b)$ could find a real and a fake coin. Thus $\tau(\pa,\pb)$ is an upper bound of $\tau^-(\pa,\pb)$.
@@ -91,7 +89,7 @@ Beyound the remainning $\pa+\pb-i$ parts,
 
 
 \begin{definition}
-Same as previous problem, we define $\IS^-$, $\OIS^-$ and $\tau^-(a,b)$.
+For convenience, we define $Q(n,a,b)$ as the number of edges that avoids $\pa$ but contains $\pb$ 
 \end{definition}
 
 Note that $Q(n,a,b)\geq\tau(a,n-a)$\\
