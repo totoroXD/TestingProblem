@@ -2,13 +2,92 @@ import logging
 import sys
 
 logger = logging.getLogger('simple_example')
+
+N=15;
+
 def subsums(nums):
     n=sum(nums)
     has=[True]+[False]*n
     for v in nums:
-        for j in range(n-v,-1,-1):
+        for j in xrange(n-v,-1,-1):
             if has[j]: has[j+v]=True
     return has
+def sumsofroot(n,chds):
+    nums=[]
+    for v in chds:
+        nums.append(v[0])
+    nums.append(n-1-sum(nums))
+    return subsums(nums)
+def merge_sums(hasa, hasb):# merge b into a
+    for i in xrange(len(hasb)):
+        hasa[i]=hasa[i]|hasb[i]
+trees_a=[]
+partitions_a=[]
+def partitions(n):
+    def dfs(n, nums, res):
+        if n==0:
+            res.append(nums[:])
+            # print nums
+        for v in xrange(1 if len(nums)==0 else nums[len(nums)-1], n+1):
+            nums.append(v)
+            dfs(n-v,nums,res)
+            nums.pop()
+    res=[];
+    dfs(n,[],res)
+    return res
+
+def trees(n): #return [ tree, [(.,.), (.,.)...],...] tree:[(chdsize, chdid), (.,.), ...]
+    def dfs_chd(n, parts, chds, now_chd, res):
+        if now_chd>= len(parts): 
+            res.append(chds[:])
+            return
+        # print n, parts, now_chd
+        if 0<now_chd and parts[now_chd-1]==parts[now_chd]:
+            chds.append(chds[len(chds)-1])
+            dfs_chd(n, parts, chds, now_chd+1, res)
+            chds.pop()
+            return
+        for v in xrange(len(trees_a[parts[now_chd]])):
+            chds.append((parts[now_chd],v))
+            dfs_chd(n, parts, chds, now_chd+1, res)
+            chds.pop()
+    if n==0: return [[]]
+    if n==1: return [[(0,-1)]]
+    res=[]
+    chd=[]
+    for partition in partitions_a[n-1]:
+        dfs_chd(n, partition, chd, 0, res)
+    return res
+def go_tree(n, v, has):# now at node 
+    if n==1:
+        has[1]=has[n-2]=True
+        return
+    chds=trees_a[v[0]][v[1]];
+    merge_sums(has,sumsofroot(n, chds))
+    for u in chds:
+        go_tree(n,u,has)
+
+for i in xrange(N+1):
+    pts=partitions(i)
+    partitions_a.append(pts[:])
+Tavoid=[]
+for i in range(N+1):
+    Tavoid.append([False]*(N+1))
+
+for i in xrange(N+1):
+    ts=trees(i)
+    trees_a.append(ts[:])
+    print '#tree:',len(ts)
+    for treeid in xrange(len(ts)):
+        has=[True]+[False]*i
+        go_tree(i,(i,treeid),has)
+        for j in range(i):
+            if(j>i): print 'jizz'
+            if not has[j]:
+                Tavoid[i][j]=True
+                # print trees_a[i][treeid]
+                # print has
+
 def find_real_fake(a,b): #choose max d if tie
     if a>b: a,b = b,a
     d = min_nonfactor(a)
