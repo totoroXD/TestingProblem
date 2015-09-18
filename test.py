@@ -81,6 +81,11 @@ def set2int(sett):
     for i in range(len(sett)):
         if sett[i]: res|=(1<<i)
     return res
+def int2set(setb):
+    res=[]
+    for i in range(32):
+        if setb&(1<<i): res.append(i)
+    return res
 for i in xrange(N+1):
     pts=partitions(i)
     partitions_a.append(pts[:])
@@ -88,14 +93,13 @@ for i in xrange(N+1):
 Tavoid=[] #T[n][k]: exist size-n tree avoid k
 Tssset=[] #T[n]: set of subset-sums for all size-n tree
 Tid=[]
-for i in range(N+1):
+for i in xrange(N+1):
     Tavoid.append([False]*(N+1))
     Tid.append([0]*(N+1))
     Tssset.append({set2int([True]*(i))})
 for i in xrange(N+1):
     ts=trees(i)
     trees_a.append(ts[:])
-    print '#tree',i,':',len(ts)
     for treeid in xrange(len(ts)):
         has=[True]+[False]*i
         go_tree(i,(i,treeid),has)
@@ -106,12 +110,15 @@ for i in xrange(N+1):
                 Tid[i][j]=treeid
                 # print trees_a[i][treeid]
                 # print has
-def find_real_fake_with_c(a,b):
-    def dfs(n, nums,has):
+    print '#tree',i,':',len(ts),'avoid',Tssset[i]
+# for i in xrange(N+1):
+def find_real_fake_with_c(a,b):# not cycle
+    def dfs(n, nums,has,res):
+        if len(nums)+n<=len(res):return
         if n==0:
             print nums
             ok=True
-            res=nums[:]
+            tres=nums[:]
             for i in range(len(nums)):
                 if not ok: break
                 ss=subsums_exclude(nums,i)
@@ -122,12 +129,13 @@ def find_real_fake_with_c(a,b):
                 for t in Tssset[nums[i]]:
                     if (t|ss)==ss:# has 
                         tok=True
-                        res[i]=t
+                        tres[i]=t
                         break
                 if not tok: ok=False
             if ok:
+                while len(res):res.pop()
                 for i in range(len(nums)):
-                    print (nums[i], res[i]),
+                    res.append((nums[i], tres[i]))
         for v in range(1 if len(nums)==0 else nums[len(nums)-1], n+1):
             nhas=has[:]
             ok=True
@@ -139,13 +147,14 @@ def find_real_fake_with_c(a,b):
                         break
             if not ok: continue
             nums.append(v)
-            dfs(n-v,nums,nhas)
+            dfs(n-v,nums,nhas,res)
             nums.pop()
+    res=[]
     nums=[]
     has=[False]*(a+b+2)
     has[0]=True;
-    dfs(a+b+1, nums, has)
-    return 0
+    dfs(a+b+1, nums, has, res)
+    return res
 def find_real_fake(a,b): #choose max d if tie
     if a>b: a,b = b,a
     d = min_nonfactor(a)
