@@ -116,7 +116,7 @@ def find_real_fake_with_c(a,b):# not cycle
     def dfs(n, nums,has,res):
         if len(nums)+n<=len(res):return
         if n==0:
-            print nums
+            # print nums
             ok=True
             tres=nums[:]
             for i in range(len(nums)):
@@ -136,7 +136,7 @@ def find_real_fake_with_c(a,b):# not cycle
                 while len(res):res.pop()
                 for i in range(len(nums)):
                     res.append((nums[i], tres[i]))
-        for v in range(1 if len(nums)==0 else nums[len(nums)-1], n+1):
+        for v in range(1 if len(nums)==0 else nums[len(nums)-1], min(N+1,n+1)):
             nhas=has[:]
             ok=True
             for i in range(b,-1,-1):
