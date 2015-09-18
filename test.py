@@ -3,7 +3,7 @@ import sys
 
 logger = logging.getLogger('simple_example')
 
-N=15;
+N=13;
 
 def subsums(nums):
     n=sum(nums)
@@ -16,7 +16,8 @@ def subsums(nums):
 def subsums_exclude(nums, exi):
     n=sum(nums)
     has=[True]+[False]*n
-    for i in len(nums):
+    for i in xrange(len(nums)):
+        v=nums[i]
         if i==exi: continue
         for j in xrange(n-v,-1,-1):
             if has[j]: has[j+v]=True
@@ -108,10 +109,25 @@ for i in xrange(N+1):
 def find_real_fake_with_c(a,b):
     def dfs(n, nums,has):
         if n==0:
-            # print nums
-            for locc in range(len(nums)):
-                subsums_exclude(nums,locc)
-                
+            print nums
+            ok=True
+            res=nums[:]
+            for i in range(len(nums)):
+                if not ok: break
+                ss=subsums_exclude(nums,i)
+                ss=ss[0:a+1]
+                ss.reverse()
+                ss=~set2int(ss)
+                tok=False
+                for t in Tssset[nums[i]]:
+                    if (t|ss)==ss:# has 
+                        tok=True
+                        res[i]=t
+                        break
+                if not tok: ok=False
+            if ok:
+                for i in range(len(nums)):
+                    print (nums[i], res[i]),
         for v in range(1 if len(nums)==0 else nums[len(nums)-1], n+1):
             nhas=has[:]
             ok=True
@@ -125,7 +141,10 @@ def find_real_fake_with_c(a,b):
             nums.append(v)
             dfs(n-v,nums,nhas)
             nums.pop()
-    res=[]
+    nums=[]
+    has=[False]*(a+b+2)
+    has[0]=True;
+    dfs(a+b+1, nums, has)
     return 0
 def find_real_fake(a,b): #choose max d if tie
     if a>b: a,b = b,a
