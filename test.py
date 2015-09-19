@@ -110,7 +110,8 @@ for i in xrange(N+1):
                 Tid[i][j]=treeid
                 # print trees_a[i][treeid]
                 # print has
-    print '#tree',i,':',len(ts),'avoid',Tssset[i]
+def print_tree(size):
+    print '#tree',size,':',len(ts),'avoid',Tssset[size]
 # for i in xrange(N+1):
 def find_real_fake_with_c(a,b):# not cycle
     def dfs(n, nums,has,res):
