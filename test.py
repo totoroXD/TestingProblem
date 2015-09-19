@@ -3,7 +3,7 @@ import sys
 
 logger = logging.getLogger('simple_example')
 
-N=13;
+N=16;
 
 def subsums(nums):
     n=sum(nums)
@@ -111,33 +111,48 @@ for i in xrange(N+1):
                 # print trees_a[i][treeid]
                 # print has
 def print_tree(size):
-    print '#tree',size,':',len(ts),'avoid',Tssset[size]
+    print 'tree',size,':',len(trees_a[size]),'avoid',Tssset[size]
 # for i in xrange(N+1):
-def find_real_fake_with_c(a,b):# not cycle
-    def dfs(n, nums,has,res):
+def find_real_fake_with_c(a,b, withCycle=True):# not cycle
+    def dfs(n, nums,has,res,withCycle):
         if len(nums)+n<=len(res):return
         if n==0:
             # print nums
-            ok=True
+            notok_cnt=0
             tres=nums[:]
             for i in range(len(nums)):
-                if not ok: break
+                if notok_cnt>1: break
                 ss=subsums_exclude(nums,i)
                 ss=ss[0:a+1]
                 ss.reverse()
                 ss=~set2int(ss)
                 tok=False
+                if nums[i]>N:
+                    notok_cnt=notok_cnt+1
+                    notok_i=i
+                    continue
                 for t in Tssset[nums[i]]:
                     if (t|ss)==ss:# has 
                         tok=True
                         tres[i]=t
                         break
-                if not tok: ok=False
-            if ok:
+                if not tok:
+                    notok_cnt=notok_cnt+1
+                    notok_i=i
+            if notok_cnt==0:
                 while len(res):res.pop()
                 for i in range(len(nums)):
                     res.append((nums[i], tres[i]))
-        for v in range(1 if len(nums)==0 else nums[len(nums)-1], min(N+1,n+1)):
+            elif notok_cnt==1 and withCycle: # try cycle
+                ss=subsums_exclude(nums,notok_i)
+                ss=ss[0:a+1]
+                ss.reverse()
+                if (nums[notok_i]-1>a or not ss[nums[notok_i]-1]) and len(nums)-1>len(res):
+                    while len(res):res.pop()
+                    for i in range(len(nums)):
+                        if i==notok_i: continue
+                        res.append((nums[i], tres[i]))
+        for v in range(1 if len(nums)==0 else nums[len(nums)-1], n+1):
             nhas=has[:]
             ok=True
             for i in range(b,-1,-1):
@@ -148,13 +163,13 @@ def find_real_fake_with_c(a,b):# not cycle
                         break
             if not ok: continue
             nums.append(v)
-            dfs(n-v,nums,nhas,res)
+            dfs(n-v,nums,nhas,res,withCycle)
             nums.pop()
     res=[]
     nums=[]
     has=[False]*(a+b+2)
     has[0]=True;
-    dfs(a+b+1, nums, has, res)
+    dfs(a+b+1, nums, has, res,withCycle)
     return res
 def find_real_fake(a,b): #choose max d if tie
     if a>b: a,b = b,a
