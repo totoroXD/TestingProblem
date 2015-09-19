@@ -14,4 +14,4 @@ for a in range(1,n+1):
 		if a<=b: tab[a-1][b-1]=a+b+1-len(test.find_real_fake_with_c(a,b))
 
 tab = addOutline(tab)
-print tabulate(tab,['tauc(a,b)']+range(1,m),tablefmt="pipe")
+print tabulate(tab,['tauc(a,b)']+range(1,m+1),tablefmt="pipe")
