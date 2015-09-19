@@ -8,10 +8,12 @@ def addOutline(table):
 	return table
 n=10
 m=35
-tab=[x[:] for x in [[0]*m]*n]
+tab=[x[:] for x in [[' ']*m]*n]
 for a in range(1,n+1):
 	for b in range(1,m+1):
-		if a<=b: tab[a-1][b-1]=a+b+1-len(test.find_real_fake_with_c(a,b))
+		if a<=b: 
+			r=a+b+1-len(test.find_real_fake_with_c(a,b))
+			if r<=b+2: tab[a-1][b-1]=r
 
 tab = addOutline(tab)
 print tabulate(tab,['tauc(a,b)']+range(1,m+1),tablefmt="pipe")
